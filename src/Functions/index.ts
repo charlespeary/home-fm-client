@@ -1,0 +1,1 @@
+export { getUserInformations } from "./requests";
