@@ -1,5 +1,6 @@
 export { saveToken, deleteToken } from "./auth";
 export { FetchStatus } from "./songs";
+export { fetchUserAlbums } from "./albums";
 
 export type Token = {
     value: string,
@@ -7,7 +8,7 @@ export type Token = {
 }
 
 export type User = {
-    name: string
+    display_name: string;
 }
 
 export type UserAction = {
@@ -25,9 +26,15 @@ export enum Action {
     DELETE_TOKEN,
     REFRESH_TOKEN,
     FETCH_USER_PROFILE,
-    SAVE_USER_PROFILE
+    SAVE_USER_PROFILE,
+    USER_FETCH_FAILED
 }
 
 export enum TokenStatus {
     OK, INVALID, EXPIRED,
+}
+
+export type Album = {
+    name: string;
+
 }

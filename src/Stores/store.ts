@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux'
-import { token, user } from "../Reducers/index"
+import { token } from "../Reducers/index"
 import { initialState } from './index';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger'
@@ -8,7 +8,7 @@ import { createLogger } from 'redux-logger'
 const loggerMiddleware = createLogger()
 
 const app = combineReducers(
-    { token, user }
+    { token }
 );
 
 export const store = createStore(app, initialState, applyMiddleware(thunkMiddleware, loggerMiddleware));
