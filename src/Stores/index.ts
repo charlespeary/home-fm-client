@@ -1,12 +1,15 @@
 export { initialState } from "./initialState";
 export { store } from "./store";
-import { FetchStatus, TokenStatus, Token } from "../Actions/index";
+import { Token, Album, Song, User } from "../Actions/index";
 
 
 
 
 export interface ReduxState {
     token: Token,
+    songs: Song[],
+    albums: Album[]
+    user: User
 }
 
 export interface Action {

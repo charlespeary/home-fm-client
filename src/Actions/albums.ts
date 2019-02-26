@@ -1,16 +1,41 @@
-import { Album } from "./index";
+import { Album, StandardAction, Action, RequestData } from "./index";
 import { Result, axios } from "../Functions/index";
 import { store } from "../Stores/index";
 
+export function saveUserAlbums(albums: Album[]): StandardAction<Album[]> {
+    return {
+        value: albums,
+        type: Action.SAVE_ALBUMS
+    }
+}
+
+export function albumsFetchFailed(): StandardAction<Album[]> {
+    return {
+        value: [],
+        type: Action.ALBUMS_FETCH_FAILED
+    }
+}
+
+
 export async function fetchUserAlbums() {
     const token = store.getState().token.value;
-    const user = await axios.get<Album>("/me/playlists", {
+    const albums = await axios.get<RequestData<Album>>("/me/playlists", {
         headers: {
             'Authorization': `Bearer  ${token}`
         }
     }).then((response) => {
         const { data } = response;
-        return { value: data, error: false } as Result<Album>;
-    }).catch(e => { return { error: true } as Result<Album> });
-    return user as any;
+        return { value: data.items, error: false } as Result<Album[]>;
+    }).catch(e => { return { error: true } as Result<Album[]> });
+    return albums;
 }
+
+export async function getUserAlbums() {
+    const albums = await fetchUserAlbums();
+    if (albums.error) {
+        return albumsFetchFailed();
+    } else {
+        return saveUserAlbums(albums.value);
+    }
+}
+
