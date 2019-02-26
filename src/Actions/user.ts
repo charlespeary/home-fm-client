@@ -16,9 +16,8 @@ export function userFetchFailed(): UserAction {
     }
 }
 
-
-export async function fetchUserInformations(): Promise<UserAction> {
-    const user = await getUserInformations();
+export async function getUserInformations(): Promise<UserAction> {
+    const user = await fetchUserInformations();
     if (user.error) {
         return userFetchFailed();
     } else {
@@ -26,9 +25,7 @@ export async function fetchUserInformations(): Promise<UserAction> {
     }
 }
 
-
-
-export async function getUserInformations() {
+export async function fetchUserInformations() {
     const token = store.getState().token.value;
     const user = await axios.get<User>("/me", {
         headers: {
