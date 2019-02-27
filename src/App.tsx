@@ -5,27 +5,36 @@ import { Login, AuthRedirection as AuthRedirectionComponent } from "./Components
 import { Provider, connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { store, ReduxState } from './Stores/index';
-import { saveToken, getUserFavouriteSongs } from './Actions/index';
+import { saveToken, getUserFavouriteSongs, Token } from './Actions/index';
 import { getUserInformations } from './Actions/user';
 import { RouteComponentProps } from "react-router-dom";
 import { getUserAlbums } from './Actions/albums';
 import { SongList } from './Components/Containers/index';
+import { getTokenFromLocalStorage } from './Actions/auth';
+import { token } from './Reducers';
 
 interface AppProps extends RouteComponentProps {
   fetchUserInformations: () => void;
   fetchUserAlbums: () => void;
   fetchAlbumSongs: () => void;
   fetchFavouriteSongs: () => void;
+  getTokenFromLocalStorage: () => void;
+  token: Token;
 }
 
 
 class App extends Component<AppProps> {
+  componentDidMount() {
+    this.props.getTokenFromLocalStorage();
+  }
 
-  componentWillReceiveProps(props: any) {
+  componentWillReceiveProps(props: AppProps) {
     if (props.token.value.length > 0) {
       this.props.fetchUserInformations();
       this.props.fetchUserAlbums();
       this.props.fetchFavouriteSongs();
+      // prevent props update loop and redirect to songs with component to render them
+
     }
   }
 
@@ -34,9 +43,9 @@ class App extends Component<AppProps> {
       <div className="App-header">
         <Switch>
           <Route path="/auth" component={AuthRedirection} />
+          <Route path="/songs" component={SongList} />
           <Route path="/" component={Login} />
         </Switch>
-        <SongList />
       </div>
     )
   }
@@ -47,14 +56,14 @@ class Root extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <AppCore />
+          <Route path="/" component={AppCore} />
         </Router>
       </Provider>
     );
   }
 }
 
-const mapStateToProps = (state: ReduxState, something: any) => {
+const mapStateToProps = (state: ReduxState) => {
   return {
     token: state.token
   }
@@ -71,6 +80,9 @@ const appDTP = (dispatch: Dispatch) => {
     },
     fetchFavouriteSongs: async () => {
       await getUserFavouriteSongs(dispatch);
+    },
+    getTokenFromLocalStorage: () => {
+      dispatch(getTokenFromLocalStorage());
     }
   }
 }
