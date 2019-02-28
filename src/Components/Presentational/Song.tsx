@@ -3,7 +3,8 @@ import { Song, Artist } from '../../Actions/index';
 import { List, Avatar } from 'antd';
 
 interface SongProps {
-    song: Song
+    song: Song,
+    setActiveSong: (song: Song) => void;
 }
 
 function formatArtists(artists: Artist[]) {
@@ -18,7 +19,7 @@ export class SongItem extends Component<SongProps> {
 
         return (
             <List.Item className="list-item-song" onClick={() => {
-                console.log(`${formatArtists(artists)} - ${this.props.song.name} `);
+                this.props.setActiveSong(this.props.song);
             }}>
                 <List.Item.Meta
                     avatar={<Avatar src={this.props.song.album.images[0].url} />}

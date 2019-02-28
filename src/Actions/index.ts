@@ -1,6 +1,9 @@
+import { string } from "prop-types";
+
 export { saveToken, deleteToken } from "./auth";
 export { fetchUserAlbums } from "./albums";
 export { getUserFavouriteSongs } from "./songs";
+export { setActiveSong } from "./activeSong";
 
 export type Token = {
     value: string,
@@ -39,12 +42,14 @@ export enum Action {
     ALBUMS_FETCH_FAILED,
     // songs actions
     SAVE_SONGS,
-    SONGS_FETCH_FAILED
+    SONGS_FETCH_FAILED,
+    // activeSong actions
+    SET_ACTIVE_SONG
 
 }
 
 export enum TokenStatus {
-    OK, INVALID, EXPIRED,
+    OK, INVALID, EXPIRED
 }
 
 export type Album = {

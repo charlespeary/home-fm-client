@@ -24,17 +24,21 @@ interface AppProps extends RouteComponentProps {
 
 
 class App extends Component<AppProps> {
+  state = {
+    tokenSaved: false
+  }
+
   componentDidMount() {
     this.props.getTokenFromLocalStorage();
   }
 
   componentWillReceiveProps(props: AppProps) {
-    if (props.token.value.length > 0) {
+    if (props.token.value.length > 0 && !this.state.tokenSaved) {
       this.props.fetchUserInformations();
       this.props.fetchUserAlbums();
       this.props.fetchFavouriteSongs();
-      // prevent props update loop and redirect to songs with component to render them
-
+      this.props.history.push("/songs");
+      this.setState({ tokenSaved: true });
     }
   }
 

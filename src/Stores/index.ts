@@ -9,7 +9,8 @@ export interface ReduxState {
     token: Token,
     songs: Song[],
     albums: Album[]
-    user: User
+    user: User,
+    activeSong: Song
 }
 
 export interface Action {

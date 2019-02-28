@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { Song } from '../../Actions/index';
+import { Song, setActiveSong } from '../../Actions/index';
 import { SongItem } from '../Presentational/index';
 import { connect } from 'react-redux';
 import { ReduxState } from '../../Stores/index';
 import 'antd/dist/antd.css';
-import { List, Avatar } from 'antd';
+import { List, } from 'antd';
+import { Dispatch } from "redux";
 
 type SongListProps = {
-    songs: Song[]
+    songs: Song[],
+    setActiveSong: (song: Song) => void;
 }
 
 type SongListState = {
@@ -34,7 +36,7 @@ class SongList extends Component<SongListProps, SongListState> {
                     size={"large"}
                     itemLayout="horizontal"
                     dataSource={this.props.songs}
-                    renderItem={(song: Song) => <SongItem song={song} />}
+                    renderItem={(song: Song) => <SongItem setActiveSong={this.props.setActiveSong} song={song} />}
                     pagination={{
                         total: this.props.songs.length,
                         pageSize: this.state.window_height / 100,
@@ -50,14 +52,23 @@ class SongList extends Component<SongListProps, SongListState> {
 
 
 
-const mapStateToProps = (state: ReduxState, something: any) => {
+const mapStateToProps = (state: ReduxState) => {
     return {
         songs: state.songs
     }
 }
 
+const dispatchToProps = (dispatch: Dispatch) => {
+    return {
+        setActiveSong: (song: Song) => {
+            dispatch(setActiveSong(song));
+        }
+    }
+}
+
 const SongListComponent = connect(
-    mapStateToProps
+    mapStateToProps,
+    dispatchToProps
 )(SongList);
 
 
