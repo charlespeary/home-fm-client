@@ -1,11 +1,8 @@
-import { TokenStatus, Song, User } from "../Actions/index";
+import { Song, User, Token } from "../Actions/index";
 import { ReduxState } from "./index";
 
 export const initialState: ReduxState = {
-    token: {
-        value: "",
-        status: TokenStatus.INVALID,
-    },
+    token: <Token>{},
     songs: [],
     user: <User>{},
     albums: [],

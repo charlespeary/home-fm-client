@@ -1,4 +1,5 @@
 import { string } from "prop-types";
+import { Moment } from "moment";
 
 export { saveToken, deleteToken } from "./auth";
 export { fetchUserAlbums } from "./albums";
@@ -8,6 +9,15 @@ export { setActiveSong } from "./activeSong";
 export type Token = {
     value: string,
     status: TokenStatus,
+    createdAt: Moment,
+    expiresAt: Moment
+}
+
+export type TokenFromLocalStorage = {
+    value:string,
+    status:TokenStatus,
+    createdAt:Date,
+    expiresAt:Date
 }
 
 export type User = {
@@ -17,11 +27,6 @@ export type User = {
 export type UserAction = {
     user: User,
     type: Action
-}
-
-export type TokenAction = {
-    token: string,
-    type: Action,
 }
 
 export type StandardAction<T> = {

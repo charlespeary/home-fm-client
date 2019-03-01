@@ -1,16 +1,12 @@
-import { Action, TokenAction, saveToken, TokenStatus, Token } from "../Actions/index";
-export function token(state: Token = { value: "", status: TokenStatus.INVALID }, action: TokenAction): Token {
+import { Action, saveToken, TokenStatus, Token, StandardAction } from "../Actions/index";
+import moment from "moment";
+
+export function token(state: Token = {} as Token, action: StandardAction<Token>): Token {
     switch (action.type) {
         case Action.SAVE_TOKEN:
-            return {
-                value: action.token,
-                status: TokenStatus.OK
-            }
+            return action.value;
         case Action.DELETE_TOKEN:
-            return {
-                value: action.token,
-                status: TokenStatus.INVALID
-            }
+            return action.value;
         case Action.REFRESH_TOKEN:
 
         default:

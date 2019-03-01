@@ -5,13 +5,12 @@ import { Login, AuthRedirection as AuthRedirectionComponent } from "./Components
 import { Provider, connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { store, ReduxState } from './Stores/index';
-import { saveToken, getUserFavouriteSongs, Token } from './Actions/index';
+import { saveToken, getUserFavouriteSongs, Token, TokenStatus, Song } from './Actions/index';
 import { getUserInformations } from './Actions/user';
 import { RouteComponentProps } from "react-router-dom";
 import { getUserAlbums } from './Actions/albums';
 import { SongList } from './Components/Containers/index';
 import { getTokenFromLocalStorage } from './Actions/auth';
-import { token } from './Reducers';
 
 interface AppProps extends RouteComponentProps {
   fetchUserInformations: () => void;
@@ -20,12 +19,13 @@ interface AppProps extends RouteComponentProps {
   fetchFavouriteSongs: () => void;
   getTokenFromLocalStorage: () => void;
   token: Token;
+  activeSong: Song;
 }
 
 
 class App extends Component<AppProps> {
   state = {
-    tokenSaved: false
+    didRouteChange: false
   }
 
   componentDidMount() {
@@ -33,12 +33,22 @@ class App extends Component<AppProps> {
   }
 
   componentWillReceiveProps(props: AppProps) {
-    if (props.token.value.length > 0 && !this.state.tokenSaved) {
+    // didRouteChange is used to prevent infinite loops of props updates caused due to changed props of react-router
+    // if token got from local storage is expired redirect to login component
+    if (props.token.status === TokenStatus.EXPIRED && !this.state.didRouteChange) {
+      this.props.history.push("/login");
+      this.setState({ didRouteChange: true });
+    }
+    // if token got from local storage is not expired fetch needed data and redirect to component that lists songs
+    else if (props.token.value.length > 0 && !this.state.didRouteChange && props.token.status !== TokenStatus.EXPIRED) {
       this.props.fetchUserInformations();
       this.props.fetchUserAlbums();
       this.props.fetchFavouriteSongs();
       this.props.history.push("/songs");
-      this.setState({ tokenSaved: true });
+      this.setState({ didRouteChange: true });
+    } else {
+      this.setState({ didRouteChange: false });
+
     }
   }
 
@@ -69,7 +79,8 @@ class Root extends Component {
 
 const mapStateToProps = (state: ReduxState) => {
   return {
-    token: state.token
+    token: state.token,
+    activeSong:state.activeSong
   }
 }
 
