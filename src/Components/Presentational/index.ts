@@ -1,1 +1,1 @@
-export { SongItem } from "./Song";
+export { SongItem, formatArtists } from "./Song";

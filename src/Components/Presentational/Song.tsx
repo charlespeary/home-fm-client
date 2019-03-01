@@ -7,7 +7,7 @@ interface SongProps {
     setActiveSong: (song: Song) => void;
 }
 
-function formatArtists(artists: Artist[]) {
+export function formatArtists(artists: Artist[]) {
     return artists.slice(0, 3).map(artist => artist.name).join(", ")
 }
 

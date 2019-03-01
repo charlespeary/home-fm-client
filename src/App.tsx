@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { Login, AuthRedirection as AuthRedirectionComponent } from "./Components/index";
+import { Login, AuthRedirection as AuthRedirectionComponent, MusicPlayer } from "./Components/index";
 import { Provider, connect } from 'react-redux';
 import { Dispatch } from "redux";
 import { store, ReduxState } from './Stores/index';
@@ -60,6 +60,7 @@ class App extends Component<AppProps> {
           <Route path="/songs" component={SongList} />
           <Route path="/" component={Login} />
         </Switch>
+        <MusicPlayer activeSong={this.props.activeSong} />
       </div>
     )
   }

@@ -17,26 +17,25 @@
   color: #61dafb;
 }
 
-.list-container{
-  width:70%;
+.list-container {
+  width: 70%;
 }
 
-.list-item-song{
-  transition: color 0.3s  linear;
+.list-item-song {
+  transition: color 0.3s linear;
   cursor: pointer;
-
 }
 
-.list-item-song:hover .song-name{
-  transition: color 0.3s  linear;
-  color:#4286f4;
+.list-item-song:hover .song-name {
+  transition: color 0.3s linear;
+  color: #4286f4;
 }
 
-@media(max-width:920px){
-.list-container{
-  width:95%;
-  padding-bottom:2rem;
- }
+@media (max-width: 920px) {
+  .list-container {
+    width: 95%;
+    padding-bottom: 2rem;
+  }
 }
 
 @keyframes App-logo-spin {
@@ -46,4 +45,57 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.music-player-container {
+  background: #282828;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.active-song {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  width: 25%;
+}
+
+.center-panel {
+  width: 50%;
+  justify-content: center;
+  flex-wrap: wrap;
+  display: flex;
+}
+
+.functional-buttons {
+  width: 75%;
+  justify-content: center;
+  display: flex;
+  padding-bottom: 0.5rem;
+}
+
+.functional-buttons > button {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.song-progress {
+  width: 80%;
+  justify-content: center;
+  display: flex;
+}
+
+.song-volume {
+  width: 25%;
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
 }
