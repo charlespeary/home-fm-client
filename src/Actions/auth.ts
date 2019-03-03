@@ -1,6 +1,7 @@
 import { Action, Token, StandardAction, TokenStatus, TokenFromLocalStorage } from "./index";
 import * as store from "store";
 import moment from "moment";
+import { isObjectEmpty } from "./index";
 
 function convertToken(token: TokenFromLocalStorage): Token {
     return {
@@ -13,7 +14,7 @@ function convertToken(token: TokenFromLocalStorage): Token {
 
 export function getTokenFromLocalStorage(): StandardAction<Token> {
     const token: TokenFromLocalStorage = store.get("token", {});
-    if (moment(token.expiresAt).isBefore(moment())) {
+    if (moment(token.expiresAt).isBefore(moment()) || isObjectEmpty(token)) {
         return {
             value: {
                 value: "EXPIRED_TOKEN",

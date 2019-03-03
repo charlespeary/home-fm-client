@@ -46,10 +46,6 @@ export class AuthRedirection extends Component<AuthProps> {
     }
 }
 
-
-
-
-
 interface LTSProps {
     linkToSpotifyAuth: string,
 }
