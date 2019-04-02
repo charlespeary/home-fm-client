@@ -23,7 +23,7 @@ body {
 
 .list-container {
   width: 100%;
-  height: 90vh;
+  height: 87vh;
 }
 
 .list-item-song {
@@ -35,7 +35,6 @@ body {
   transition: color 0.3s linear;
   color: #4286f4;
 }
-
 
 @keyframes App-logo-spin {
   from {
@@ -54,6 +53,8 @@ body {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  padding-top: 0.5rem;
 }
 
 .active-song {
@@ -92,4 +93,15 @@ body {
   display: flex;
   justify-content: flex-end;
   padding: 1rem;
+}
+
+.player-expander {
+  position: absolute;
+  top: -1rem;
+  margin-left: auto;
+  margin-right: auto;
+  background: #47494c;
+  border-radius: 25%;
+  display: flex;
+  justify-content: center;
 }

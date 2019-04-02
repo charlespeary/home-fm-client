@@ -42,7 +42,6 @@ class App extends Component<AppProps> {
   componentWillReceiveProps(props: AppProps) {
     // didRouteChange is used to prevent infinite loops of props updates caused due to changed props of react-router
     // if token got from local storage is expired redirect to login component
-    console.log(props.token);
     if (
       props.token.status === TokenStatus.EXPIRED &&
       !this.state.didRouteChange

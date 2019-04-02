@@ -3,11 +3,10 @@ import { Moment } from "moment";
 export { saveToken, deleteToken, getTokenFromLocalStorage } from "./auth";
 export { fetchUserAlbums, getUserAlbums } from "./albums";
 export { getUserFavouriteSongs } from "./songs";
-export { setActiveSong, setRandomSong, setPreviousSong } from "./activeSong";
+export { setActiveSong, setRandomSong } from "./activeSong";
 export { randomNumber, isObjectEmpty } from "./functions";
 export { getUserInformations } from "./user";
-export { pushSongToHistory, popSongFromHistory } from "./previousSongs";
-
+export { ws } from "./websocket";
 export type Token = {
   value: string;
   status: TokenStatus;
@@ -49,7 +48,10 @@ export enum Action {
   SET_ACTIVE_SONG,
   // previous songs
   PUSH_SONG,
-  POP_SONG
+  POP_SONG,
+  // websocket actions
+  WS_CONNECTION_FAILED,
+  WS_CONNECTION_SUCCESSFULL
 }
 
 export enum TokenStatus {

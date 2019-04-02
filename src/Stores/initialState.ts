@@ -7,5 +7,6 @@ export const initialState: ReduxState = {
   user: <User>{},
   albums: [],
   previousSongs: [],
-  activeSong: <Song>{}
+  activeSong: <Song>{},
+  websocketConnected: false
 };

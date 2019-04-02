@@ -9,4 +9,5 @@ export interface ReduxState {
   user: User;
   previousSongs: Song[];
   activeSong: Song;
+  websocketConnected: boolean;
 }

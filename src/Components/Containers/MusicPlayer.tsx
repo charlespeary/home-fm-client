@@ -1,3 +1,4 @@
+/** @jsx jsx */ import { jsx, keyframes } from "@emotion/core";
 import React, { Component } from "react";
 import { Song, setRandomSong, isObjectEmpty } from "../../Actions/index";
 import {
@@ -8,13 +9,13 @@ import {
   IoIosVolumeLow,
   IoIosVolumeMute
 } from "react-icons/io";
-import { Button, Avatar, Slider } from "antd";
+import { FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
+import { Button, Avatar, Slider, List } from "antd";
 import { formatArtists } from "../Presentational";
 import { Dispatch } from "redux";
 import { ReduxState } from "../../Stores";
 import { connect } from "react-redux";
-import { setPreviousSong } from "../../Actions/index";
-
+import { css } from "@emotion/core";
 type MusicPlayerProps = {
   previousSongs: Song[];
   activeSong: Song;
@@ -33,37 +34,133 @@ function convertTime(time: number) {
   }`;
 }
 
+const expanderStyle = css({
+  position: "absolute",
+  marginLeft: "auto",
+  marginRight: "auto",
+  top: "-0.75rem",
+  borderTopRightRadius: "20%",
+  borderTopLeftRadius: "20%",
+  background: "#282828",
+  cursor: "pointer"
+});
+
+const expandTop = keyframes`
+  from {
+    top:85%;
+  }
+  to {
+    top:2%;
+  }
+`;
+
+const expandBottom = keyframes`
+  from {
+    top:2%;
+  }
+  to {
+    top:85%;
+  }
+`;
+
+const musicPlayer = (clicked: boolean) =>
+  css({
+    background: "#282828",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    width: "100%",
+    marginLeft: "auto",
+    marginRight: "auto",
+    position: "fixed",
+    bottom: 0,
+    top: clicked ? "2%" : "85%",
+    animation: clicked ? `${expandTop} 1.5s ease` : `${expandBottom} 1.5s ease`,
+    flexWrap: "wrap"
+  });
+
+const playerTools = css({
+  width: "100%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "flex-end"
+});
+
+//const currentSong = css({});
+
 class MusicPlayer extends Component<MusicPlayerProps> {
   state = {
-    progress: 0
+    progress: 0,
+    clicked: false
   };
 
   render() {
     const { duration_ms } = this.props.activeSong;
+    const isSongSet = !isObjectEmpty(this.props.activeSong);
     return (
-      <div className="music-player-container">
-        {!isObjectEmpty(this.props.activeSong) && (
-          <ActiveSong activeSong={this.props.activeSong} />
-        )}
-        <div className="center-panel">
-          <div className="functional-buttons">
-            <Button ghost onClick={() => this.props.previousSong()}>
-              <IoIosSkipBackward />
-            </Button>
-            <Button ghost>
-              <IoIosPlay />
-            </Button>
-            <Button ghost onClick={() => this.props.nextSong()}>
-              <IoIosSkipForward />
-            </Button>
+      <div css={musicPlayer(this.state.clicked)}>
+        {this.state.clicked && isSongSet && <SongsQueue />}
+        <div css={playerTools}>
+          <span
+            onClick={() => this.setState({ clicked: !this.state.clicked })}
+            css={expanderStyle}
+          >
+            {this.state.clicked ? <FaAngleDoubleDown /> : <FaAngleDoubleUp />}
+          </span>
+          {isSongSet && <ActiveSong activeSong={this.props.activeSong} />}
+          <div className="center-panel">
+            <div className="functional-buttons">
+              <Button ghost onClick={() => this.props.previousSong()}>
+                <IoIosSkipBackward />
+              </Button>
+              <Button ghost>
+                <IoIosPlay />
+              </Button>
+              <Button ghost onClick={() => this.props.nextSong()}>
+                <IoIosSkipForward />
+              </Button>
+            </div>
+            <div className="song-progress">
+              <SongTimer duration_ms={duration_ms} />
+            </div>
           </div>
-          <div className="song-progress">
-            <SongTimer duration_ms={duration_ms} />
+          <div className="song-volume">
+            <VolumeSlider />
           </div>
         </div>
-        <div className="song-volume">
-          <VolumeSlider />
-        </div>
+      </div>
+    );
+  }
+}
+
+const fadeOut = keyframes`
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+`;
+
+const songsQueue = css({
+  animation: `${fadeOut} 1.5s ease`,
+  overflow: "hidden",
+  width: "100%",
+  display: "flex",
+  justifyContent: "center"
+});
+
+class SongsQueue extends Component {
+  render() {
+    return (
+      <div css={songsQueue} className="active-song">
+        <List
+          dataSource={[{ name: "xD" }, { name: "pozdro" }]}
+          bordered={true}
+          size={"large"}
+          itemLayout="horizontal"
+          renderItem={(x: any) => <span>{x.name}</span>}
+        />
       </div>
     );
   }
@@ -189,12 +286,12 @@ const dispatchToProps = (dispatch: Dispatch) => {
   return {
     // set some random song to be active and save it in previousSongs history
     nextSong: () => {
-      dispatch(setRandomSong(true));
+      // dispatch(setRandomSong(true));
     },
     // set last element of previousSongs array to be active song then pop it off
     // if there are no elements in the previousSongs array a random song will be set to be active
     previousSong: () => {
-      dispatch(setPreviousSong());
+      //dispatch(setPreviousSong());
     }
   };
 };

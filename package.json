@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/core": "^10.0.9",
     "@emotion/styled": "^10.0.7",
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",

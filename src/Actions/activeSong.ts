@@ -1,6 +1,6 @@
 import { Action, Song, StandardAction, randomNumber } from "./index";
 import { store } from "../Stores/index";
-import { pushSongToHistory, popSongFromHistory } from "./previousSongs";
+import { sendSong } from "./websocket";
 
 // if pushToHistory equals true then song will be pushed to previousSongs array
 export function setActiveSong(
@@ -8,9 +8,10 @@ export function setActiveSong(
   pushToHistory: boolean
 ): StandardAction<Song> {
   // push song to previousSongs, so we can know what songs has been played before
+  sendSong(song.name, song.artists.map(a => a.name));
   if (pushToHistory) {
     const currentSong = store.getState().activeSong;
-    store.dispatch(pushSongToHistory(currentSong));
+    // store.dispatch(pushSongToHistory(currentSong));
   }
   return {
     value: song,
@@ -25,13 +26,13 @@ export function setRandomSong(pushToHistory: boolean): StandardAction<Song> {
   return setActiveSong(randomSong, pushToHistory);
 }
 
-export function setPreviousSong(): StandardAction<Song> {
-  const { previousSongs } = store.getState();
-  const nextSong = [...previousSongs].pop();
-  if (nextSong) {
-    // there was some song, so after it's set to an active one we don't want it in the history anymore
-    store.dispatch(popSongFromHistory());
-    return setActiveSong(nextSong, false);
-  }
-  return setRandomSong(false);
-}
+// export function setPreviousSong(): StandardAction<Song> {
+//   const { previousSongs } = store.getState();
+//   const nextSong = [...previousSongs].pop();
+//   if (nextSong) {
+//     // there was some song, so after it's set to an active one we don't want it in the history anymore
+//     store.dispatch(popSongFromHistory());
+//     return setActiveSong(nextSong, false);
+//   }
+//   return setRandomSong(false);
+// }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Song, setActiveSong } from "../../Actions/index";
-import { SongItem } from "../Presentational/index";
+import { SongItem, formatArtists } from "../Presentational/index";
 import { connect } from "react-redux";
 import { ReduxState } from "../../Stores/index";
 import "antd/dist/antd.css";
@@ -60,6 +60,7 @@ const dispatchToProps = (dispatch: Dispatch) => {
   return {
     setActiveSong: (song: Song) => {
       // set song to be active, true indicates that we want to push it onto previousSongs history
+      // sendSong(song.name, formatArtists(song.artists));
       dispatch(setActiveSong(song, true));
     }
   };
