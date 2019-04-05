@@ -9,7 +9,7 @@ export function songsQueue(
       return state.concat(action.songs);
     case Action.TOGGLE_SONG_IN_QUEUE:
       return state.map((song: Song) => {
-        if (song.formatted_name == action.songName) {
+        if (song.name == action.songName) {
           return {
             ...song,
             isReady: action.isReady
@@ -18,6 +18,15 @@ export function songsQueue(
           return song;
         }
       });
+    // this overrides whole array of songs
+    case Action.SAVE_SONGS_IN_QUEUE:
+      return action.songs;
+    case Action.DELETE_RECENT_ACTIVE_SONG_FROM_QUEUE:
+      if (state.length > 0) {
+        return state.slice(1, state.length);
+      } else {
+        return state;
+      }
     default:
       return state;
   }

@@ -4,7 +4,9 @@ import {
   Action,
   Song,
   SongsRequestData,
-  Artist
+  Artist,
+  SongReadiness,
+  PlainSong
 } from "./index";
 import { Result, axios } from "../Functions/index";
 import { store } from "../Stores/index";
@@ -56,9 +58,15 @@ export async function fetchUserSongs(paginationStatus: PaginationStatus) {
       total = data.total;
       // unwrap songs from song containers
       const songs: Song[] = data.items.map(item => {
+        const { track } = item;
         return {
-          ...item.track,
-          formatted_name: formatName(item.track.name, item.track.artists)
+          id: track.id,
+          name: track.name,
+          thumbnail_url: track.album.images[0].url,
+          duration: track.duration / 1000,
+          formatted_name: formatName(track.name, track.artists),
+          isReady: SongReadiness.NOT_READY,
+          artists: track.artists.map(artist => artist.name).join(", ")
         };
       });
       return { value: songs, error: false } as Result<Song[]>;

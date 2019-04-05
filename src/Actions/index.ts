@@ -41,7 +41,20 @@ export type ToggleSong = {
   songName: string;
 };
 
-export type SongsQueueAction = AddSongs | ToggleSong;
+export type SaveSongs = {
+  type: Action.SAVE_SONGS_IN_QUEUE;
+  songs: Song[];
+};
+
+export type DeleteRecentActiveSong = {
+  type: Action.DELETE_RECENT_ACTIVE_SONG_FROM_QUEUE;
+};
+
+export type SongsQueueAction =
+  | SaveSongs
+  | AddSongs
+  | ToggleSong
+  | DeleteRecentActiveSong;
 
 export enum Action {
   // token actions
@@ -66,9 +79,10 @@ export enum Action {
   WS_CONNECTION_FAILED,
   WS_CONNECTION_SUCCESSFULL,
   // songs state
-  SAVE_SONGS_QUEUE,
+  SAVE_SONGS_IN_QUEUE,
   ADD_SONGS_TO_QUEUE,
-  TOGGLE_SONG_IN_QUEUE
+  TOGGLE_SONG_IN_QUEUE,
+  DELETE_RECENT_ACTIVE_SONG_FROM_QUEUE
 }
 
 export enum TokenStatus {
@@ -91,7 +105,7 @@ export type RequestData<T> = {
 
 export type SongContainer = {
   created_at: Date;
-  track: Song;
+  track: PlainSong;
 };
 
 export interface SongsRequestData extends RequestData<SongContainer> {
@@ -109,7 +123,8 @@ export type Image = {
   url: string;
 };
 
-export type Song = {
+// plain song object from spotify api
+export type PlainSong = {
   href: string;
   name: string;
   artists: Artist[];
@@ -117,6 +132,17 @@ export type Song = {
   id: string;
   duration: number;
   formatted_name: string;
+  // it's gonna be used in queue to determine whether server downloaded it already or not
+  isReady: SongReadiness;
+};
+
+export type Song = {
+  name: string;
+  artists: string;
+  id: string;
+  duration: number;
+  formatted_name: string;
+  thumbnail_url: string;
   // it's gonna be used in queue to determine whether server downloaded it already or not
   isReady: SongReadiness;
 };

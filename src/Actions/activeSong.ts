@@ -8,7 +8,7 @@ export function setActiveSong(
 ): StandardAction<Song> {
   // whether we want to notify server about incoming song or not
   if (download) {
-    sendSong(song.name, song.artists.map(a => a.name));
+    sendSong(song.name, song.artists, song.thumbnail_url);
   }
   return {
     value: song,

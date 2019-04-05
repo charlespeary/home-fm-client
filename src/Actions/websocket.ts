@@ -1,7 +1,11 @@
 import { StandardAction, Action, Song, SongReadiness } from "./index";
 import { store } from "../Stores/index";
 import { setActiveSong } from "./activeSong";
-import { toggleSong, addSongsToQueue } from "./songsQueue";
+import {
+  toggleSong,
+  saveSongsInQueue,
+  deleteRecentActiveSongFromQueue
+} from "./songsQueue";
 export const ws = new WebSocket("ws://127.0.0.1:8080/ws/");
 
 type WSAction = {
@@ -36,10 +40,11 @@ ws.onmessage = event => {
   switch (data.action) {
     case "next_song":
       handleNextSong(data.value.next_song as Song);
+      store.dispatch(deleteRecentActiveSongFromQueue());
       break;
     case "queue_state":
       const queue: Song[] = data.value.songs_queue;
-      store.dispatch(addSongsToQueue(queue));
+      store.dispatch(saveSongsInQueue(queue));
       let activeSong: Song = data.value.active_song;
       store.dispatch(setActiveSong(activeSong, false));
       return;
@@ -47,7 +52,7 @@ ws.onmessage = event => {
       let downloadedSong: Song = data.value;
       store.dispatch(toggleSong(downloadedSong.name, SongReadiness.READY));
       return;
-    case "song_download_finished":
+    case "song_download_failed":
       let failedSong: Song = data.value;
       store.dispatch(toggleSong(failedSong.name, SongReadiness.CANT_DOWNLOAD));
       return;
@@ -61,13 +66,20 @@ function handleNextSong(song: Song) {
   store.dispatch(setActiveSong(song, false));
 }
 
-export function sendSong(songName: string, artists: string[]) {
+export function sendSong(
+  songName: string,
+  artists: string,
+  thumbnailUrl: string
+) {
   const data = {
     action: "request_song",
     payload: {
       artists,
-      name: songName
+      name: songName,
+      thumbnail_url: thumbnailUrl
     }
   };
   ws.send(JSON.stringify(data));
 }
+
+function convertSongs(songs: Song[]) {}

@@ -258,14 +258,14 @@ class ActiveSong extends Component<ActiveSongProps> {
         <Avatar
           size={50}
           shape={"square"}
-          src={this.props.activeSong.album.images[0].url}
+          src={this.props.activeSong.thumbnail_url}
         />
         <div style={{ display: "inline-block", paddingLeft: "0.5rem" }}>
           <div style={{ fontSize: "0.9rem", width: "100%" }}>
             {this.props.activeSong.name}
           </div>
           <div style={{ fontSize: "0.7rem", width: "100%", color: "#b3b3b3" }}>
-            {formatArtists(this.props.activeSong.artists)}
+            {this.props.activeSong.artists}
           </div>
         </div>
       </div>
