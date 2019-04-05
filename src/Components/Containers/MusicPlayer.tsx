@@ -24,7 +24,7 @@ type MusicPlayerProps = {
 };
 
 function convertTime(time: number) {
-  const seconds = Math.floor(time / 1000);
+  const seconds = Math.floor(time);
   const mins = Math.floor(seconds / 60);
   const secondsRemaining = seconds - mins * 60;
 
@@ -34,50 +34,20 @@ function convertTime(time: number) {
   }`;
 }
 
-const expanderStyle = css({
-  position: "absolute",
+const musicPlayer = css({
+  background: "#282828",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "flex-end",
+  width: "100%",
   marginLeft: "auto",
   marginRight: "auto",
-  top: "-0.75rem",
-  borderTopRightRadius: "20%",
-  borderTopLeftRadius: "20%",
-  background: "#282828",
-  cursor: "pointer"
+  position: "fixed",
+  bottom: 0,
+  top: "85%",
+  flexWrap: "wrap",
+  padding: "1rem 10% 1rem 10%"
 });
-
-const expandTop = keyframes`
-  from {
-    top:85%;
-  }
-  to {
-    top:2%;
-  }
-`;
-
-const expandBottom = keyframes`
-  from {
-    top:2%;
-  }
-  to {
-    top:85%;
-  }
-`;
-
-const musicPlayer = (clicked: boolean) =>
-  css({
-    background: "#282828",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-end",
-    width: "100%",
-    marginLeft: "auto",
-    marginRight: "auto",
-    position: "fixed",
-    bottom: 0,
-    top: clicked ? "2%" : "85%",
-    animation: clicked ? `${expandTop} 1.5s ease` : `${expandBottom} 1.5s ease`,
-    flexWrap: "wrap"
-  });
 
 const playerTools = css({
   width: "100%",
@@ -85,8 +55,6 @@ const playerTools = css({
   justifyContent: "center",
   alignItems: "flex-end"
 });
-
-//const currentSong = css({});
 
 class MusicPlayer extends Component<MusicPlayerProps> {
   state = {
@@ -98,76 +66,16 @@ class MusicPlayer extends Component<MusicPlayerProps> {
     // const { duration_ms } = this.props.activeSong;
     const isSongSet = !isObjectEmpty(this.props.activeSong);
     return (
-      <div css={musicPlayer(this.state.clicked)}>
-        {this.state.clicked && isSongSet && <SongsQueue />}
-        <div css={playerTools}>
-          <span
-            onClick={() => this.setState({ clicked: !this.state.clicked })}
-            css={expanderStyle}
-          >
-            {this.state.clicked ? <FaAngleDoubleDown /> : <FaAngleDoubleUp />}
-          </span>
-          {isSongSet && <ActiveSong activeSong={this.props.activeSong} />}
-          <div className="center-panel">
-            <div className="functional-buttons">
-              <Button ghost onClick={() => this.props.previousSong()}>
-                <IoIosSkipBackward />
-              </Button>
-              <Button ghost>
-                <IoIosPlay />
-              </Button>
-              <Button ghost onClick={() => this.props.nextSong()}>
-                <IoIosSkipForward />
-              </Button>
-            </div>
-            <div className="song-progress">
-              {/* <SongTimer duration_ms={duration_ms} /> */}
-            </div>
-          </div>
-          <div className="song-volume">
-            <VolumeSlider />
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
-
-const fadeOut = keyframes`
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0%);
-  }
-`;
-
-const songsQueue = css({
-  animation: `${fadeOut} 1.5s ease`,
-  overflow: "hidden",
-  width: "100%",
-  display: "flex",
-  justifyContent: "center"
-});
-
-class SongsQueue extends Component {
-  render() {
-    return (
-      <div css={songsQueue} className="active-song">
-        <List
-          dataSource={[{ name: "xD" }, { name: "pozdro" }]}
-          bordered={true}
-          size={"large"}
-          itemLayout="horizontal"
-          renderItem={(x: any) => <span>{x.name}</span>}
-        />
+      <div css={musicPlayer}>
+        {isSongSet && <ActiveSong activeSong={this.props.activeSong} />}
+        <SongTimer duration={this.props.activeSong.duration} />
       </div>
     );
   }
 }
 
 type SongTimerProps = {
-  duration_ms: number;
+  duration: number;
 };
 
 class SongTimer extends Component<SongTimerProps> {
@@ -184,13 +92,13 @@ class SongTimer extends Component<SongTimerProps> {
   }
 
   componentWillReceiveProps(props: SongTimerProps) {
-    if (props.duration_ms !== this.props.duration_ms) {
+    if (props.duration !== this.props.duration) {
       this.setState({ progress: 0 });
     }
   }
 
   render() {
-    const { duration_ms } = this.props;
+    const { duration } = this.props;
     return (
       <div style={{ width: "100%" }}>
         <Slider
@@ -200,47 +108,19 @@ class SongTimer extends Component<SongTimerProps> {
               style: {
                 color: "#ffffff"
               },
-              label: <strong>{convertTime(this.state.progress * 1000)}</strong>
+              label: <strong>{convertTime(this.state.progress)}</strong>
             },
-            [duration_ms / 1000]: {
+            [duration]: {
               style: {
                 color: "#ffffff"
               },
-              label: <strong>{convertTime(duration_ms)}</strong>
+              label: <strong>{convertTime(duration)}</strong>
             }
           }}
           step={1}
           value={this.state.progress}
           min={0}
-          max={duration_ms / 1000}
-        />
-      </div>
-    );
-  }
-}
-
-class VolumeSlider extends Component {
-  state = { currentVolume: 0 };
-  render() {
-    const { currentVolume } = this.state;
-    return (
-      <div
-        style={{
-          width: "100%",
-          display: "flex",
-          flexWrap: "nowrap",
-          justifyContent: "center",
-          alignItems: "center"
-        }}
-      >
-        {currentVolume < 50 && currentVolume !== 0 && <IoIosVolumeLow />}
-        {currentVolume >= 50 && <IoIosVolumeHigh />}
-        {currentVolume === 0 && <IoIosVolumeMute />}
-
-        <Slider
-          onChange={currentVolume => this.setState({ currentVolume })}
-          style={{ width: "100%" }}
-          defaultValue={0}
+          max={duration}
         />
       </div>
     );
@@ -251,10 +131,14 @@ type ActiveSongProps = {
   activeSong: Song;
 };
 
+const activeSong = css({
+  width: "100%",
+  height: "3rem"
+});
 class ActiveSong extends Component<ActiveSongProps> {
   render() {
     return (
-      <div className="active-song">
+      <div css={activeSong}>
         <Avatar
           size={50}
           shape={"square"}
