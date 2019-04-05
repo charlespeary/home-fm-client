@@ -9,6 +9,7 @@ import { addSongsToQueue } from "../../Actions/songsQueue";
 import { SongQueueItem } from "../Presentational/Song";
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
 import { scheduleSong } from "../../Actions/activeSong";
+
 const Search = Input.Search;
 type SongListProps = {
   songs: Song[];
@@ -40,7 +41,25 @@ class SongList extends Component<SongListProps, SongListState> {
     searchbarValue: ""
   };
 
+  getData = (songs: Song[]) => {
+    if (this.state.searchbarValue.length === 0) {
+      return songs;
+    }
+    return songs.filter(song => {
+      const songName = song.name.toLowerCase();
+      const artists = song.artists.toLowerCase();
+      return (
+        songName.includes(this.state.searchbarValue) ||
+        artists.includes(this.state.searchbarValue)
+      );
+    });
+  };
+
   render() {
+    const songs =
+      this.state.selectedList === SelectedList.SongsQueue
+        ? this.getData(this.props.songsQueue)
+        : this.getData(this.props.songs);
     return (
       <div className="list-container">
         <Menu
@@ -72,48 +91,43 @@ class SongList extends Component<SongListProps, SongListState> {
             }
           }}
         />
-        <List
-          locale={{
-            emptyText:
-              this.state.selectedList === SelectedList.SongsQueue
-                ? "There are no songs scheduled in the queue"
-                : "There are no favourite songs in your spotify account."
-          }}
-          bordered={false}
-          size={"large"}
-          itemLayout="horizontal"
-          dataSource={
-            this.state.selectedList === SelectedList.SongsQueue
-              ? this.props.songsQueue
-              : this.props.songs
-          }
-          renderItem={(song: Song) => {
-            if (this.state.selectedList === SelectedList.SongsQueue) {
-              return (
-                <SongQueueItem
-                  setActiveSong={this.props.setActiveSong}
-                  song={song}
-                />
-              );
-            } else {
-              return (
-                <SongItem
-                  setActiveSong={this.props.setActiveSong}
-                  song={song}
-                />
-              );
-            }
-          }}
-          pagination={{
-            total:
-              this.state.selectedList === SelectedList.SongsQueue
-                ? this.props.songsQueue.length
-                : this.props.songs.length,
-            pageSize: window.innerHeight / 110,
-            simple: true,
-            showQuickJumper: true
-          }}
-        />
+        <span>
+          <List
+            locale={{
+              emptyText:
+                this.state.selectedList === SelectedList.SongsQueue
+                  ? "There are no songs scheduled in the queue"
+                  : "There are no favourite songs in your spotify account."
+            }}
+            bordered={false}
+            size={"large"}
+            itemLayout="horizontal"
+            dataSource={songs}
+            renderItem={(song: Song) => {
+              if (this.state.selectedList === SelectedList.SongsQueue) {
+                return (
+                  <SongQueueItem
+                    setActiveSong={this.props.setActiveSong}
+                    song={song}
+                  />
+                );
+              } else {
+                return (
+                  <SongItem
+                    setActiveSong={this.props.setActiveSong}
+                    song={song}
+                  />
+                );
+              }
+            }}
+            pagination={{
+              total: songs.length,
+              pageSize: window.innerHeight / 110,
+              simple: true,
+              showQuickJumper: true
+            }}
+          />
+        </span>
       </div>
     );
   }
@@ -133,7 +147,7 @@ const dispatchToProps = (dispatch: Dispatch) => {
       notification.success({
         description: song.formatted_name,
         message: "Successfully scheduled",
-        duration: window.innerWidth >= 576 ? 3 : 1
+        duration: window.innerWidth >= 576 ? 2 : 1
       });
       scheduleSong(song);
       dispatch(addSongsToQueue([song]));
