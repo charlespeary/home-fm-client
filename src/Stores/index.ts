@@ -1,6 +1,6 @@
 export { initialState } from "./initialState";
 export { store } from "./store";
-import { Token, Album, Song, User, SongsState } from "../Actions/index";
+import { Token, Album, Song, User } from "../Actions/index";
 
 export interface ReduxState {
   token: Token;
@@ -10,4 +10,5 @@ export interface ReduxState {
   previousSongs: Song[];
   activeSong: Song;
   websocketConnected: boolean;
+  songsQueue: Song[];
 }

@@ -71,7 +71,7 @@ class App extends Component<AppProps> {
           <Route path="/songs" component={SongList} />
           <Route path="/" component={Login} />
         </Switch>
-        <MusicPlayer />
+        {/* <MusicPlayer /> */}
       </div>
     );
   }

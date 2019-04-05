@@ -1,6 +1,6 @@
 /** @jsx jsx */ import { jsx, keyframes } from "@emotion/core";
 import React, { Component } from "react";
-import { Song, setRandomSong, isObjectEmpty } from "../../Actions/index";
+import { Song, isObjectEmpty } from "../../Actions/index";
 import {
   IoIosSkipBackward,
   IoIosSkipForward,
@@ -95,7 +95,7 @@ class MusicPlayer extends Component<MusicPlayerProps> {
   };
 
   render() {
-    const { duration_ms } = this.props.activeSong;
+    // const { duration_ms } = this.props.activeSong;
     const isSongSet = !isObjectEmpty(this.props.activeSong);
     return (
       <div css={musicPlayer(this.state.clicked)}>
@@ -121,7 +121,7 @@ class MusicPlayer extends Component<MusicPlayerProps> {
               </Button>
             </div>
             <div className="song-progress">
-              <SongTimer duration_ms={duration_ms} />
+              {/* <SongTimer duration_ms={duration_ms} /> */}
             </div>
           </div>
           <div className="song-volume">

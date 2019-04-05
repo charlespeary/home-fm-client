@@ -4,3 +4,4 @@ export { albums } from "./albums";
 export { songs } from "./songs";
 export { activeSong } from "./songsState";
 export { websocketConnected } from "./websocket";
+export { songsQueue } from "./songsQueue";

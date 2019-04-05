@@ -3,7 +3,7 @@ import { Moment } from "moment";
 export { saveToken, deleteToken, getTokenFromLocalStorage } from "./auth";
 export { fetchUserAlbums, getUserAlbums } from "./albums";
 export { getUserFavouriteSongs } from "./songs";
-export { setActiveSong, setRandomSong } from "./activeSong";
+export { setActiveSong } from "./activeSong";
 export { randomNumber, isObjectEmpty } from "./functions";
 export { getUserInformations } from "./user";
 export { ws } from "./websocket";
@@ -30,6 +30,19 @@ export type StandardAction<T> = {
   type: Action;
 };
 
+export type AddSongs = {
+  type: Action.ADD_SONGS_TO_QUEUE;
+  songs: Song[];
+};
+
+export type ToggleSong = {
+  type: Action.TOGGLE_SONG_IN_QUEUE;
+  isReady: SongReadiness;
+  songName: string;
+};
+
+export type SongsQueueAction = AddSongs | ToggleSong;
+
 export enum Action {
   // token actions
   SAVE_TOKEN,
@@ -51,7 +64,11 @@ export enum Action {
   POP_SONG,
   // websocket actions
   WS_CONNECTION_FAILED,
-  WS_CONNECTION_SUCCESSFULL
+  WS_CONNECTION_SUCCESSFULL,
+  // songs state
+  SAVE_SONGS_QUEUE,
+  ADD_SONGS_TO_QUEUE,
+  TOGGLE_SONG_IN_QUEUE
 }
 
 export enum TokenStatus {
@@ -62,15 +79,8 @@ export enum TokenStatus {
 
 export type Album = {
   name: string;
-  collaborative: boolean;
-  href: string;
   id: string;
   images: Image[];
-  owner: User;
-  primary_color: string;
-  public: boolean;
-  type: string;
-  uri: string;
   tracks: Tracks;
 };
 
@@ -96,21 +106,26 @@ export type Tracks = {
 };
 
 export type Image = {
-  height: number;
-  widht: number;
   url: string;
 };
 
 export type Song = {
   href: string;
   name: string;
-  preview_url: string;
-  uri: string;
   artists: Artist[];
   album: Album;
   id: string;
-  duration_ms: number;
+  duration: number;
+  formatted_name: string;
+  // it's gonna be used in queue to determine whether server downloaded it already or not
+  isReady: SongReadiness;
 };
+
+export enum SongReadiness {
+  READY,
+  NOT_READY,
+  CANT_DOWNLOAD
+}
 
 export type Artist = {
   name: string;

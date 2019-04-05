@@ -1,7 +1,7 @@
-import { StandardAction, Action, Song } from "./index";
+import { StandardAction, Action, Song, SongReadiness } from "./index";
 import { store } from "../Stores/index";
 import { setActiveSong } from "./activeSong";
-import { formatArtists } from "../Components/Presentational";
+import { toggleSong, addSongsToQueue } from "./songsQueue";
 export const ws = new WebSocket("ws://127.0.0.1:8080/ws/");
 
 type WSAction = {
@@ -33,21 +33,32 @@ ws.onopen = event => {
 
 ws.onmessage = event => {
   const data: WSAction = JSON.parse(event.data);
-  console.log(data);
   switch (data.action) {
     case "next_song":
-      handleNextSong(data.value as NextSong);
-    case "song_download_success":
-      console.log("Downloaded song : ", data.value);
-    case "song_download_failure":
+      handleNextSong(data.value.next_song as Song);
+      break;
+    case "queue_state":
+      const queue: Song[] = data.value.songs_queue;
+      store.dispatch(addSongsToQueue(queue));
+      let activeSong: Song = data.value.active_song;
+      store.dispatch(setActiveSong(activeSong, false));
+      return;
+    case "song_download_finished":
+      let downloadedSong: Song = data.value;
+      store.dispatch(toggleSong(downloadedSong.name, SongReadiness.READY));
+      return;
+    case "song_download_finished":
+      let failedSong: Song = data.value;
+      store.dispatch(toggleSong(failedSong.name, SongReadiness.CANT_DOWNLOAD));
+      return;
     case "song_download_started":
-
+      break;
     default:
   }
 };
 
-function handleNextSong(song: NextSong) {
-  // store.dispatch(setActiveSong(song as Song, false));
+function handleNextSong(song: Song) {
+  store.dispatch(setActiveSong(song, false));
 }
 
 export function sendSong(songName: string, artists: string[]) {
