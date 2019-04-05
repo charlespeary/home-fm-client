@@ -3,11 +3,12 @@ import { Song, setActiveSong } from "../../Actions/index";
 import { SongItem } from "../Presentational/index";
 import { connect } from "react-redux";
 import { ReduxState } from "../../Stores/index";
-import { List, Menu, Input } from "antd";
+import { List, Menu, Input, notification } from "antd";
 import { Dispatch } from "redux";
 import { addSongsToQueue } from "../../Actions/songsQueue";
 import { SongQueueItem } from "../Presentational/Song";
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
+import { scheduleSong } from "../../Actions/activeSong";
 const Search = Input.Search;
 type SongListProps = {
   songs: Song[];
@@ -129,6 +130,12 @@ const dispatchToProps = (dispatch: Dispatch) => {
   return {
     setActiveSong: (song: Song) => {
       // set song to be active, true indicates that we want to download it
+      notification.success({
+        description: song.formatted_name,
+        message: "Successfully scheduled",
+        duration: window.innerWidth >= 576 ? 3 : 1
+      });
+      scheduleSong(song);
       dispatch(addSongsToQueue([song]));
     }
   };

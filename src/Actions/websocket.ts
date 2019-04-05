@@ -6,6 +6,7 @@ import {
   saveSongsInQueue,
   deleteRecentActiveSongFromQueue
 } from "./songsQueue";
+import { notification } from "antd";
 export const ws = new WebSocket("ws://127.0.0.1:8080/ws/");
 
 type WSAction = {
@@ -39,6 +40,12 @@ ws.onmessage = event => {
   const data: WSAction = JSON.parse(event.data);
   switch (data.action) {
     case "next_song":
+      notification.open({
+        message: "Now playing",
+        description: `${data.value.next_song.name} - ${
+          data.value.next_song.artists
+        }`
+      });
       handleNextSong(data.value.next_song as Song);
       store.dispatch(deleteRecentActiveSongFromQueue());
       break;
@@ -46,7 +53,7 @@ ws.onmessage = event => {
       const queue: Song[] = data.value.songs_queue;
       store.dispatch(saveSongsInQueue(queue));
       let activeSong: Song = data.value.active_song;
-      store.dispatch(setActiveSong(activeSong, false));
+      store.dispatch(setActiveSong(activeSong));
       return;
     case "song_download_finished":
       let downloadedSong: Song = data.value;
@@ -63,7 +70,7 @@ ws.onmessage = event => {
 };
 
 function handleNextSong(song: Song) {
-  store.dispatch(setActiveSong(song, false));
+  store.dispatch(setActiveSong(song));
 }
 
 export function sendSong(
