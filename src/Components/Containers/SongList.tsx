@@ -3,12 +3,12 @@ import { Song, setActiveSong } from "../../Actions/index";
 import { SongItem } from "../Presentational/index";
 import { connect } from "react-redux";
 import { ReduxState } from "../../Stores/index";
-import "antd/dist/antd.css";
-import { List, Menu } from "antd";
+import { List, Menu, Input } from "antd";
 import { Dispatch } from "redux";
 import { addSongsToQueue } from "../../Actions/songsQueue";
 import { SongQueueItem } from "../Presentational/Song";
-
+/** @jsx jsx */ import { jsx, css } from "@emotion/core";
+const Search = Input.Search;
 type SongListProps = {
   songs: Song[];
   songsQueue: Song[];
@@ -26,6 +26,7 @@ type SongListState = {
   window_height: number;
   window_width: number;
   selectedList: SelectedList;
+  searchbarValue: string;
 };
 
 class SongList extends Component<SongListProps, SongListState> {
@@ -34,7 +35,8 @@ class SongList extends Component<SongListProps, SongListState> {
     currentPage: 1,
     window_height: window.innerHeight,
     window_width: window.innerWidth,
-    selectedList: SelectedList.YourSongs
+    selectedList: SelectedList.YourSongs,
+    searchbarValue: ""
   };
 
   render() {
@@ -54,9 +56,29 @@ class SongList extends Component<SongListProps, SongListState> {
           <Menu.Item key={SelectedList.YourSongs}>Your songs</Menu.Item>
           <Menu.Item key={SelectedList.SongsQueue}>Songs queue</Menu.Item>
         </Menu>
-
+        <Search
+          placeholder="filter songs..."
+          size="default"
+          name="domains"
+          value={this.state.searchbarValue}
+          onChange={(e: any) => {
+            const { value } = e.target;
+            this.setState({ searchbarValue: value });
+          }}
+          onSearch={(name: string) => {
+            if (name.length == 0) {
+              return;
+            }
+          }}
+        />
         <List
-          bordered={true}
+          locale={{
+            emptyText:
+              this.state.selectedList === SelectedList.SongsQueue
+                ? "There are no songs scheduled in the queue"
+                : "There are no favourite songs in your spotify account."
+          }}
+          bordered={false}
           size={"large"}
           itemLayout="horizontal"
           dataSource={
@@ -86,7 +108,7 @@ class SongList extends Component<SongListProps, SongListState> {
               this.state.selectedList === SelectedList.SongsQueue
                 ? this.props.songsQueue.length
                 : this.props.songs.length,
-            pageSize: 9,
+            pageSize: window.innerHeight / 110,
             simple: true,
             showQuickJumper: true
           }}
@@ -107,7 +129,6 @@ const dispatchToProps = (dispatch: Dispatch) => {
   return {
     setActiveSong: (song: Song) => {
       // set song to be active, true indicates that we want to download it
-      dispatch(setActiveSong(song, true));
       dispatch(addSongsToQueue([song]));
     }
   };

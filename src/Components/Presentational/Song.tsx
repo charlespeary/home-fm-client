@@ -15,6 +15,15 @@ export function formatArtists(artists: Artist[]) {
     .join(", ");
 }
 
+function formatText(description: string) {
+  const maxNumberOfLetters = window.innerWidth / 10;
+  if (description.length > maxNumberOfLetters) {
+    return `${description.slice(0, maxNumberOfLetters)}...`;
+  } else {
+    return description;
+  }
+}
+
 export class SongItem extends Component<SongProps> {
   render() {
     const { artists } = this.props.song;
@@ -28,8 +37,12 @@ export class SongItem extends Component<SongProps> {
       >
         <List.Item.Meta
           avatar={<Avatar src={this.props.song.thumbnail_url} />}
-          title={<span className="song-name">{this.props.song.name}</span>}
-          description={artists}
+          title={
+            <span className="song-name">
+              {formatText(this.props.song.name)}
+            </span>
+          }
+          description={formatText(artists)}
         />
       </List.Item>
     );
@@ -49,8 +62,12 @@ export class SongQueueItem extends Component<SongProps> {
         {formatProgress(this.props.song.isReady)}
         <List.Item.Meta
           avatar={<Avatar src={this.props.song.thumbnail_url} />}
-          title={<span className="song-name">{this.props.song.name}</span>}
-          description={artists}
+          title={
+            <span className="song-name">
+              {formatText(this.props.song.name)}
+            </span>
+          }
+          description={formatText(artists)}
         />
       </List.Item>
     );

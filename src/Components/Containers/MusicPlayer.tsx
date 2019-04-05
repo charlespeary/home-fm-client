@@ -1,21 +1,10 @@
-/** @jsx jsx */ import { jsx, keyframes } from "@emotion/core";
+/** @jsx jsx */ import { jsx, css } from "@emotion/core";
 import React, { Component } from "react";
 import { Song, isObjectEmpty } from "../../Actions/index";
-import {
-  IoIosSkipBackward,
-  IoIosSkipForward,
-  IoIosPlay,
-  IoIosVolumeHigh,
-  IoIosVolumeLow,
-  IoIosVolumeMute
-} from "react-icons/io";
-import { FaAngleDoubleUp, FaAngleDoubleDown } from "react-icons/fa";
-import { Button, Avatar, Slider, List } from "antd";
-import { formatArtists } from "../Presentational";
+import { Avatar, Slider } from "antd";
 import { Dispatch } from "redux";
 import { ReduxState } from "../../Stores";
 import { connect } from "react-redux";
-import { css } from "@emotion/core";
 type MusicPlayerProps = {
   previousSongs: Song[];
   activeSong: Song;
@@ -34,6 +23,8 @@ function convertTime(time: number) {
   }`;
 }
 
+const breakpoint = `@media (max-width: 576px)`;
+
 const musicPlayer = css({
   background: "#282828",
   display: "flex",
@@ -42,11 +33,12 @@ const musicPlayer = css({
   width: "100%",
   marginLeft: "auto",
   marginRight: "auto",
-  position: "fixed",
-  bottom: 0,
-  top: "85%",
   flexWrap: "wrap",
-  padding: "1rem 10% 1rem 10%"
+  padding: "1rem 5% 1rem 5%",
+  height: "8rem"
+  // [breakpoint]: {
+  //   padding: "1rem 5% 1rem 5%"
+  // }
 });
 
 const playerTools = css({
@@ -78,6 +70,11 @@ type SongTimerProps = {
   duration: number;
 };
 
+const songTimer = css({
+  width: "30%",
+  height: "80%"
+});
+
 class SongTimer extends Component<SongTimerProps> {
   state = {
     progress: 0
@@ -100,28 +97,10 @@ class SongTimer extends Component<SongTimerProps> {
   render() {
     const { duration } = this.props;
     return (
-      <div style={{ width: "100%" }}>
-        <Slider
-          tooltipVisible={false}
-          marks={{
-            0: {
-              style: {
-                color: "#ffffff"
-              },
-              label: <strong>{convertTime(this.state.progress)}</strong>
-            },
-            [duration]: {
-              style: {
-                color: "#ffffff"
-              },
-              label: <strong>{convertTime(duration)}</strong>
-            }
-          }}
-          step={1}
-          value={this.state.progress}
-          min={0}
-          max={duration}
-        />
+      <div css={songTimer}>
+        <div>
+          {convertTime(this.state.progress)} / {convertTime(duration)}
+        </div>
       </div>
     );
   }
@@ -132,9 +111,13 @@ type ActiveSongProps = {
 };
 
 const activeSong = css({
-  width: "100%",
-  height: "3rem"
+  width: "70%",
+  height: "80%",
+  [breakpoint]: {
+    width: "70%"
+  }
 });
+
 class ActiveSong extends Component<ActiveSongProps> {
   render() {
     return (
