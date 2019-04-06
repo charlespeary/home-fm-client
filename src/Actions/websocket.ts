@@ -28,12 +28,31 @@ function setSocketConnected(): StandardAction<boolean> {
   };
 }
 
+function setSocketError(): StandardAction<boolean> {
+  return {
+    type: Action.WS_CONNECTION_FAILED,
+    value: false
+  };
+}
+
 let isSocketOpened = false;
 
 ws.onopen = event => {
   isSocketOpened = true;
-  console.log("connected");
+  notification.success({
+    message: "Connection",
+    description: "Successfully connected to the home-fm-server."
+  });
   store.dispatch(setSocketConnected());
+};
+
+ws.onerror = event => {
+  notification.error({
+    message: "Connection",
+    duration: 10,
+    description: "home-fm-server isn't turned on"
+  });
+  store.dispatch(setSocketError());
 };
 
 ws.onmessage = event => {

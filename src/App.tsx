@@ -28,6 +28,7 @@ interface AppProps extends RouteComponentProps {
   fetchFavouriteSongs: () => void;
   getTokenFromLocalStorage: () => void;
   token: Token;
+  socketConnected: boolean;
 }
 
 class App extends Component<AppProps> {
@@ -71,7 +72,7 @@ class App extends Component<AppProps> {
           <Route path="/songs" component={SongList} />
           <Route path="/" component={Login} />
         </Switch>
-        <MusicPlayer />
+        {this.props.socketConnected && <MusicPlayer />}
       </div>
     );
   }
@@ -91,7 +92,8 @@ class Root extends Component {
 
 const mapStateToProps = (state: ReduxState) => {
   return {
-    token: state.token
+    token: state.token,
+    socketConnected: state.websocketConnected
   };
 };
 

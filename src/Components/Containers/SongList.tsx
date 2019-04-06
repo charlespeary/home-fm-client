@@ -29,6 +29,7 @@ type SongListState = {
   window_width: number;
   selectedList: SelectedList;
   searchbarValue: string;
+  indexesToFade: number[];
 };
 
 class SongList extends Component<SongListProps, SongListState> {
@@ -38,7 +39,8 @@ class SongList extends Component<SongListProps, SongListState> {
     window_height: window.innerHeight,
     window_width: window.innerWidth,
     selectedList: SelectedList.YourSongs,
-    searchbarValue: ""
+    searchbarValue: "",
+    indexesToFade: []
   };
 
   getData = (songs: Song[]) => {
@@ -53,6 +55,10 @@ class SongList extends Component<SongListProps, SongListState> {
         artists.includes(this.state.searchbarValue)
       );
     });
+  };
+
+  handleTransition = (songs: Song[]) => {
+    return songs;
   };
 
   render() {
