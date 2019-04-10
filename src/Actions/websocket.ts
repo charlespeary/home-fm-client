@@ -15,12 +15,6 @@ type WSAction = {
   value: any;
 };
 
-type NextSong = {
-  name: string;
-  duration: number;
-  path: string;
-};
-
 function setSocketConnected(): StandardAction<boolean> {
   return {
     type: Action.WS_CONNECTION_SUCCESSFULL,
@@ -64,24 +58,37 @@ ws.onerror = event => {
   store.dispatch(setSocketError());
 };
 
+type Data<T> = {
+  value: T;
+};
+
+type NextSong = {
+  next_song: Song;
+};
+
+type QueueState = {
+  active_song: Song;
+  songs_queue: Song[];
+};
+
 ws.onmessage = event => {
   const data: WSAction = JSON.parse(event.data);
   switch (data.action) {
     case "next_song":
-      console.log(data.value);
+      const songData: NextSong = data.value;
+      const nextSong = songData.next_song;
       notification.open({
         message: "Now playing",
-        description: `${data.value.next_song.name} - ${
-          data.value.next_song.artists
-        }`
+        description: `${nextSong.name} - ${nextSong.artists}`
       });
-      handleNextSong(data.value.next_song as Song);
+      handleNextSong(nextSong);
       store.dispatch(deleteRecentActiveSongFromQueue());
       break;
     case "queue_state":
-      const queue: Song[] = data.value.songs_queue;
+      let queueState: QueueState = data.value;
+      const queue: Song[] = queueState.songs_queue;
       store.dispatch(saveSongsInQueue(queue));
-      let activeSong: Song = data.value.active_song;
+      let activeSong: Song = queueState.active_song;
       store.dispatch(setActiveSong(activeSong));
       return;
     case "song_download_finished":
