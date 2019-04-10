@@ -60,7 +60,7 @@ class MusicPlayer extends Component<MusicPlayerProps> {
     return (
       <div css={musicPlayer}>
         {isSongSet && <ActiveSong activeSong={this.props.activeSong} />}
-        <SongTimer duration={this.props.activeSong.duration} />
+        {isSongSet && <SongTimer duration={this.props.activeSong.duration} />}
       </div>
     );
   }

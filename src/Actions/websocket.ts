@@ -46,6 +46,15 @@ ws.onopen = event => {
   store.dispatch(setSocketConnected());
 };
 
+ws.onclose = event => {
+  isSocketOpened = false;
+  notification.error({
+    message: "Connection",
+    description: "Diconnected from home-fm-server"
+  });
+  store.dispatch(setSocketError());
+};
+
 ws.onerror = event => {
   notification.error({
     message: "Connection",
@@ -59,6 +68,7 @@ ws.onmessage = event => {
   const data: WSAction = JSON.parse(event.data);
   switch (data.action) {
     case "next_song":
+      console.log(data.value);
       notification.open({
         message: "Now playing",
         description: `${data.value.next_song.name} - ${

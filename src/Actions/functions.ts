@@ -4,5 +4,8 @@ export function randomNumber(min: number, max: number) {
 }
 
 export function isObjectEmpty(obj: any) {
+  if (obj === null) {
+    return true;
+  }
   return Object.entries(obj).length === 0 && obj.constructor === Object;
 }
