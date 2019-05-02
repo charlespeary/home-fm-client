@@ -1,2 +1,3 @@
 export { SongList } from "./SongList";
-export {MusicPlayerComponent as MusicPlayer} from "./MusicPlayer";
+export { MusicPlayerContainer as MusicPlayer } from "./MusicPlayer";
+export { YoutubeSearch } from "./YoutubeSearch";

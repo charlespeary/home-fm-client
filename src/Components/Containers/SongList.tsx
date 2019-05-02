@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Song, setActiveSong } from "../../Actions/index";
+import { Song, setActiveSong, CurrentView } from "../../Actions/index";
 import { SongItem } from "../Presentational/index";
 import { connect } from "react-redux";
 import { ReduxState } from "../../Stores/index";
@@ -15,6 +15,7 @@ type SongListProps = {
   songs: Song[];
   songsQueue: Song[];
   setActiveSong: (song: Song) => void;
+  currentView: CurrentView;
 };
 
 enum SelectedList {
@@ -27,9 +28,7 @@ type SongListState = {
   currentPage: number;
   window_height: number;
   window_width: number;
-  selectedList: SelectedList;
   searchbarValue: string;
-  indexesToFade: number[];
 };
 
 class SongList extends Component<SongListProps, SongListState> {
@@ -39,8 +38,7 @@ class SongList extends Component<SongListProps, SongListState> {
     window_height: window.innerHeight,
     window_width: window.innerWidth,
     selectedList: SelectedList.YourSongs,
-    searchbarValue: "",
-    indexesToFade: []
+    searchbarValue: ""
   };
 
   getData = (songs: Song[]) => {
@@ -57,31 +55,13 @@ class SongList extends Component<SongListProps, SongListState> {
     });
   };
 
-  handleTransition = (songs: Song[]) => {
-    return songs;
-  };
-
   render() {
     const songs =
-      this.state.selectedList === SelectedList.SongsQueue
+      this.props.currentView === CurrentView.SongQueue
         ? this.getData(this.props.songsQueue)
         : this.getData(this.props.songs);
     return (
       <div className="list-container">
-        <Menu
-          onClick={e => {
-            const key =
-              e.key === "YourSongs"
-                ? SelectedList.YourSongs
-                : SelectedList.SongsQueue;
-            this.setState({ selectedList: key });
-          }}
-          selectedKeys={[this.state.selectedList]}
-          mode="horizontal"
-        >
-          <Menu.Item key={SelectedList.YourSongs}>Your songs</Menu.Item>
-          <Menu.Item key={SelectedList.SongsQueue}>Songs queue</Menu.Item>
-        </Menu>
         <Search
           placeholder="filter songs..."
           size="default"
@@ -101,7 +81,7 @@ class SongList extends Component<SongListProps, SongListState> {
           <List
             locale={{
               emptyText:
-                this.state.selectedList === SelectedList.SongsQueue
+                this.props.currentView === CurrentView.SongQueue
                   ? "There are no songs scheduled in the queue"
                   : "There are no favourite songs in your spotify account."
             }}
@@ -110,7 +90,7 @@ class SongList extends Component<SongListProps, SongListState> {
             itemLayout="horizontal"
             dataSource={songs}
             renderItem={(song: Song) => {
-              if (this.state.selectedList === SelectedList.SongsQueue) {
+              if (this.props.currentView === CurrentView.SongQueue) {
                 return (
                   <SongQueueItem
                     setActiveSong={this.props.setActiveSong}
@@ -142,7 +122,8 @@ class SongList extends Component<SongListProps, SongListState> {
 const mapStateToProps = (state: ReduxState) => {
   return {
     songs: state.songs,
-    songsQueue: state.songsQueue
+    songsQueue: state.songsQueue,
+    currentView: state.currentView
   };
 };
 

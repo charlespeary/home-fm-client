@@ -82,7 +82,9 @@ export enum Action {
   SAVE_SONGS_IN_QUEUE,
   ADD_SONGS_TO_QUEUE,
   TOGGLE_SONG_IN_QUEUE,
-  DELETE_RECENT_ACTIVE_SONG_FROM_QUEUE
+  DELETE_RECENT_ACTIVE_SONG_FROM_QUEUE,
+  // current view,
+  SET_VIEW
 }
 
 export enum TokenStatus {
@@ -161,3 +163,9 @@ export type SongsState = {
   activeSong: Song;
   previousSongs: Song[];
 };
+
+export enum CurrentView {
+  SongList = "SongList",
+  SongQueue = "SongQueue",
+  YoutubeSearch = "YoutubeSearch"
+}

@@ -4,6 +4,8 @@ import "./index.css";
 import Root from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { notification } from "antd";
+
+// configure antd notification, set it to the bottom right
 notification.config({
   placement: "bottomRight",
   bottom: -5

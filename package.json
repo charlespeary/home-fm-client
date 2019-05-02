@@ -21,7 +21,7 @@
     "@types/redux-logger": "^3.0.7",
     "@types/request": "^2.48.1",
     "@types/store": "^2.0.1",
-    "antd": "^3.13.6",
+    "antd": "^3.16.6",
     "connected-react-router": "^6.3.1",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",

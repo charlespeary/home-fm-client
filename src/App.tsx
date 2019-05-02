@@ -13,14 +13,13 @@ import {
   getUserFavouriteSongs,
   Token,
   TokenStatus,
-  SongsState,
   getTokenFromLocalStorage,
   getUserAlbums,
   getUserInformations
 } from "./Actions/index";
 import { RouteComponentProps } from "react-router-dom";
 import { SongList, MusicPlayer } from "./Components/Containers/index";
-
+import { PlayerContainer } from "./Components/Containers/PlayerContainer";
 interface AppProps extends RouteComponentProps {
   fetchUserInformations: () => void;
   fetchUserAlbums: () => void;
@@ -68,8 +67,8 @@ class App extends Component<AppProps> {
     return (
       <div className="App-header">
         <Switch>
-          <Route path="/auth" component={AuthRedirection} />
-          <Route path="/songs" component={SongList} />
+          <Route exact path="/auth" component={AuthRedirection} />
+          <Route exact path="/songs" component={PlayerContainer} />
           <Route path="/" component={Login} />
         </Switch>
         {this.props.socketConnected && <MusicPlayer />}

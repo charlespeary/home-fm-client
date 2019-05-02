@@ -1,4 +1,4 @@
-import { Song, User, Token } from "../Actions/index";
+import { Song, User, Token, CurrentView } from "../Actions/index";
 import { ReduxState } from "./index";
 
 export const initialState: ReduxState = {
@@ -9,5 +9,6 @@ export const initialState: ReduxState = {
   previousSongs: [],
   activeSong: <Song>{},
   websocketConnected: false,
-  songsQueue: []
+  songsQueue: [],
+  currentView: CurrentView.SongList
 };

@@ -7,8 +7,9 @@ import {
   deleteRecentActiveSongFromQueue
 } from "./songsQueue";
 import { notification } from "antd";
-export const ws = new WebSocket("ws://127.0.0.1:8080/ws/");
-
+const ip = window.location.hostname;
+// experimental
+export const ws = new WebSocket(`ws://${ip}:8080/ws/`);
 type WSAction = {
   action: string;
   success: boolean;

@@ -22,7 +22,7 @@ const link = css({
 export class Login extends Component<AuthProps> {
   clientId = "d09edd82dac149a5b6f076515368e06d";
   responseType = "token";
-  redirectURL = window.location.origin;
+  redirectURL = `${window.location.origin}/auth`;
   linkToSpotifyAuth = `https://accounts.spotify.com/authorize?client_id=${
     this.clientId
   }&redirect_uri=${this.redirectURL}&response_type=${

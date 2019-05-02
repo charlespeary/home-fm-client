@@ -8,8 +8,6 @@ import { connect } from "react-redux";
 type MusicPlayerProps = {
   previousSongs: Song[];
   activeSong: Song;
-  nextSong: () => void;
-  previousSong: () => void;
 };
 
 function convertTime(time: number) {
@@ -149,21 +147,4 @@ const mapStateToProps = (state: ReduxState) => {
   };
 };
 
-const dispatchToProps = (dispatch: Dispatch) => {
-  return {
-    // set some random song to be active and save it in previousSongs history
-    nextSong: () => {
-      // dispatch(setRandomSong(true));
-    },
-    // set last element of previousSongs array to be active song then pop it off
-    // if there are no elements in the previousSongs array a random song will be set to be active
-    previousSong: () => {
-      //dispatch(setPreviousSong());
-    }
-  };
-};
-
-export const MusicPlayerComponent = connect(
-  mapStateToProps,
-  dispatchToProps
-)(MusicPlayer);
+export const MusicPlayerContainer = connect(mapStateToProps)(MusicPlayer);

@@ -6,7 +6,8 @@ import {
   songs,
   activeSong,
   websocketConnected,
-  songsQueue
+  songsQueue,
+  currentView
 } from "../Reducers/index";
 import { initialState } from "./index";
 import thunkMiddleware from "redux-thunk";
@@ -21,7 +22,8 @@ const app = combineReducers({
   songs,
   activeSong,
   websocketConnected,
-  songsQueue
+  songsQueue,
+  currentView
 });
 
 export const store = createStore(
