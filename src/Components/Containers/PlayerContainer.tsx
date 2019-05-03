@@ -15,10 +15,8 @@ export const PlayerContainer: FunctionComponent = () => {
   return (
     <Player>
       <MainMenu />
-      <Switch>
-        <Route exact path="/songs/youtube_search" compononent={YoutubeSearch} />
-        <Route exact path="/songs" component={SongList} />
-      </Switch>
+      <Route exact path="/songs" component={SongList} />
+      <Route exact path="/songs/youtube_search" component={YoutubeSearch} />
     </Player>
   );
 };

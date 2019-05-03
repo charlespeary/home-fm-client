@@ -68,7 +68,7 @@ class App extends Component<AppProps> {
       <div className="App-header">
         <Switch>
           <Route exact path="/auth" component={AuthRedirection} />
-          <Route exact path="/songs" component={PlayerContainer} />
+          <Route path="/songs" component={PlayerContainer} />
           <Route path="/" component={Login} />
         </Switch>
         {this.props.socketConnected && <MusicPlayer />}

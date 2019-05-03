@@ -25,7 +25,7 @@ function convertEnum(key: string): CurrentView {
   }
 }
 
-const MenuComponent: FunctionComponent<MenuProps> = props => {
+const MenuComponent: FunctionComponent<MenuProps> = (props: MenuProps) => {
   return (
     <Menu
       onSelect={e => {

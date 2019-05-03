@@ -9,6 +9,7 @@ import { addSongsToQueue } from "../../Actions/songsQueue";
 import { SongQueueItem } from "../Presentational/Song";
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
 import { scheduleSong } from "../../Actions/activeSong";
+import styled from "@emotion/styled";
 
 const Search = Input.Search;
 type SongListProps = {
@@ -30,6 +31,10 @@ type SongListState = {
   window_width: number;
   searchbarValue: string;
 };
+
+const ListContainer = styled.div({
+  marginTop: "0.7rem"
+});
 
 class SongList extends Component<SongListProps, SongListState> {
   state = {
@@ -61,7 +66,7 @@ class SongList extends Component<SongListProps, SongListState> {
         ? this.getData(this.props.songsQueue)
         : this.getData(this.props.songs);
     return (
-      <div className="list-container">
+      <ListContainer>
         <Search
           placeholder="filter songs..."
           size="default"
@@ -114,7 +119,7 @@ class SongList extends Component<SongListProps, SongListState> {
             }}
           />
         </span>
-      </div>
+      </ListContainer>
     );
   }
 }

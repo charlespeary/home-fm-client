@@ -3,10 +3,12 @@ import { Moment } from "moment";
 export { saveToken, deleteToken, getTokenFromLocalStorage } from "./auth";
 export { fetchUserAlbums, getUserAlbums } from "./albums";
 export { getUserFavouriteSongs } from "./songs";
-export { setActiveSong } from "./activeSong";
+export { setActiveSong, scheduleSong } from "./activeSong";
 export { randomNumber, isObjectEmpty } from "./functions";
 export { getUserInformations } from "./user";
 export { ws } from "./websocket";
+export { addSongsToQueue } from "./songsQueue";
+
 export type Token = {
   value: string;
   status: TokenStatus;

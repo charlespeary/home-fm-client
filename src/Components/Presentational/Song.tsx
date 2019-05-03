@@ -59,7 +59,6 @@ export class SongQueueItem extends Component<SongProps> {
           this.props.setActiveSong(this.props.song);
         }}
       >
-        {formatProgress(this.props.song.isReady)}
         <List.Item.Meta
           avatar={<Avatar src={this.props.song.thumbnail_url} />}
           title={
@@ -69,6 +68,7 @@ export class SongQueueItem extends Component<SongProps> {
           }
           description={formatText(artists)}
         />
+        {formatProgress(this.props.song.isReady)}
       </List.Item>
     );
   }
