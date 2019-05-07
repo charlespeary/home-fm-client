@@ -20,6 +20,8 @@ function convertEnum(key: string): CurrentView {
       return CurrentView.SongQueue;
     case "YoutubeSearch":
       return CurrentView.YoutubeSearch;
+    case "AvailableSongs":
+      return CurrentView.AvailableSongs;
     default:
       return CurrentView.SongList;
   }
@@ -35,10 +37,13 @@ const MenuComponent: FunctionComponent<MenuProps> = (props: MenuProps) => {
       mode="horizontal"
     >
       <Menu.Item key={CurrentView.SongList}>
-        <Link to="/songs">Your songs</Link>
+        <Link to="/songs">Spotify songs</Link>
       </Menu.Item>
       <Menu.Item key={CurrentView.SongQueue}>
         <Link to="/songs">Songs queue</Link>
+      </Menu.Item>
+      <Menu.Item key={CurrentView.AvailableSongs}>
+        <Link to="/songs">Available songs</Link>
       </Menu.Item>
       <Menu.Item key={CurrentView.YoutubeSearch}>
         <Link to="/songs/youtube_search">Search on youtube</Link>

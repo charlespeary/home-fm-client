@@ -86,7 +86,9 @@ export enum Action {
   TOGGLE_SONG_IN_QUEUE,
   DELETE_RECENT_ACTIVE_SONG_FROM_QUEUE,
   // current view,
-  SET_VIEW
+  SET_VIEW,
+  // save available songs
+  SAVE_AVAILABLE_SONGS
 }
 
 export enum TokenStatus {
@@ -149,6 +151,7 @@ export type Song = {
   thumbnail_url: string;
   // it's gonna be used in queue to determine whether server downloaded it already or not
   isReady: SongReadiness;
+  nsfw: boolean;
 };
 
 export enum SongReadiness {
@@ -169,5 +172,6 @@ export type SongsState = {
 export enum CurrentView {
   SongList = "SongList",
   SongQueue = "SongQueue",
+  AvailableSongs = "AvailableSongs",
   YoutubeSearch = "YoutubeSearch"
 }

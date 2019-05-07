@@ -1,5 +1,5 @@
 import { Action, User, StandardAction } from "./index";
-import { Result, axios } from "../Functions/index";
+import { Result, spotifyConnection } from "../Functions/index";
 import { store } from "../Stores/index";
 
 export function saveUserData(user: User): StandardAction<User> {
@@ -27,7 +27,7 @@ export async function getUserInformations(): Promise<StandardAction<User>> {
 
 export async function fetchUserInformations() {
   const token = store.getState().token.value;
-  const user = await axios
+  const user = await spotifyConnection
     .get<User>("/me", {
       headers: {
         Authorization: `Bearer  ${token}`

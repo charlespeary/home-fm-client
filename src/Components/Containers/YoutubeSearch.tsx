@@ -1,4 +1,4 @@
-import { Input, notification, Form, Button, Icon } from "antd";
+import { Input, notification, Form, Button, Switch } from "antd";
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
 
 import styled from "@emotion/styled";
@@ -30,6 +30,7 @@ type SongSearchProps = {};
 type FormValues = {
   artists: string;
   songName: string;
+  nsfw: boolean;
 };
 const SongSearch = (props: SongSearchProps & FormComponentProps) => {
   const { getFieldDecorator } = props.form;
@@ -42,7 +43,10 @@ const SongSearch = (props: SongSearchProps & FormComponentProps) => {
         // validate form and prevent default from refreshing the page
         e.preventDefault();
         props.form.validateFields((err, values: FormValues) => {
+          console.log(values);
           if (!err) {
+            // clear form
+            props.form.resetFields();
             // create new song, so we can use logic used in normal queue
             const song: Song = {
               id: "none",
@@ -51,8 +55,10 @@ const SongSearch = (props: SongSearchProps & FormComponentProps) => {
               formatted_name: `${values.artists} - ${values.songName}`,
               duration: 0,
               thumbnail_url: "https://via.placeholder.com/32",
-              isReady: SongReadiness.NOT_READY
+              isReady: SongReadiness.NOT_READY,
+              nsfw: values.nsfw
             };
+
             // schedule song and add it to queue
             scheduleSong(song);
             store.dispatch(addSongsToQueue([song]));
@@ -85,6 +91,17 @@ const SongSearch = (props: SongSearchProps & FormComponentProps) => {
             }
           ]
         })(<Input placeholder="song name..." />)}
+      </Form.Item>
+      <Form.Item label="nsfw">
+        {getFieldDecorator("nsfw", {
+          rules: [
+            {
+              required: true,
+              message: "how can I play a song if I don't know its name?"
+            }
+          ],
+          initialValue: true
+        })(<Switch defaultChecked />)}
       </Form.Item>
       <Form.Item required={true}>
         <Button loading={disabled} type="primary" htmlType="submit">

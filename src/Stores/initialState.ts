@@ -3,12 +3,12 @@ import { ReduxState } from "./index";
 
 export const initialState: ReduxState = {
   token: <Token>{},
-  songs: [],
+  spotifySongs: [],
   user: <User>{},
   albums: [],
-  previousSongs: [],
   activeSong: <Song>{},
   websocketConnected: false,
   songsQueue: [],
-  currentView: CurrentView.SongList
+  currentView: CurrentView.AvailableSongs,
+  availableSongs: []
 };

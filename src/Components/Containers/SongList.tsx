@@ -13,7 +13,8 @@ import styled from "@emotion/styled";
 
 const Search = Input.Search;
 type SongListProps = {
-  songs: Song[];
+  spotifySongs: Song[];
+  availableSongs: Song[];
   songsQueue: Song[];
   setActiveSong: (song: Song) => void;
   currentView: CurrentView;
@@ -61,10 +62,21 @@ class SongList extends Component<SongListProps, SongListState> {
   };
 
   render() {
-    const songs =
-      this.props.currentView === CurrentView.SongQueue
-        ? this.getData(this.props.songsQueue)
-        : this.getData(this.props.songs);
+    const songs = (() => {
+      switch (this.props.currentView) {
+        case CurrentView.SongQueue:
+          return this.getData(this.props.songsQueue);
+        case CurrentView.SongList:
+          return this.getData(this.props.spotifySongs);
+        case CurrentView.AvailableSongs:
+          return this.getData(this.props.availableSongs);
+        default:
+          return this.getData(this.props.availableSongs);
+      }
+    })();
+    this.props.currentView === CurrentView.SongQueue
+      ? this.getData(this.props.songsQueue)
+      : this.getData(this.props.availableSongs);
     return (
       <ListContainer>
         <Search
@@ -126,9 +138,10 @@ class SongList extends Component<SongListProps, SongListState> {
 
 const mapStateToProps = (state: ReduxState) => {
   return {
-    songs: state.songs,
+    spotifySongs: state.spotifySongs,
     songsQueue: state.songsQueue,
-    currentView: state.currentView
+    currentView: state.currentView,
+    availableSongs: state.availableSongs
   };
 };
 

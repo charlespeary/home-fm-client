@@ -1,5 +1,5 @@
 import { Action, Song, StandardAction } from "../Actions/index";
-export function songs(
+export function spotifySongs(
   state: Song[] = [],
   action: StandardAction<Song[]>
 ): Song[] {

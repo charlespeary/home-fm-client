@@ -3,27 +3,32 @@ import {
   token,
   user,
   albums,
-  songs,
+  spotifySongs,
   activeSong,
   websocketConnected,
   songsQueue,
-  currentView
+  currentView,
+  availableSongs
 } from "../Reducers/index";
 import { initialState } from "./index";
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
+import { getAvailableSongs } from "../Functions";
+import { saveAvailableSongs } from "../Actions/songsAvailable";
 
 const loggerMiddleware = createLogger();
 
+// make function with initial stuff to do
 const app = combineReducers({
   token,
   user,
   albums,
-  songs,
+  spotifySongs,
   activeSong,
   websocketConnected,
   songsQueue,
-  currentView
+  currentView,
+  availableSongs
 });
 
 export const store = createStore(
@@ -31,3 +36,9 @@ export const store = createStore(
   initialState,
   applyMiddleware(loggerMiddleware, thunkMiddleware)
 );
+
+// fetch data from API
+
+getAvailableSongs().then(songs => {
+  store.dispatch(saveAvailableSongs(songs));
+});

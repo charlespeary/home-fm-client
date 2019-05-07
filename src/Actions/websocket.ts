@@ -113,15 +113,25 @@ function handleNextSong(song: Song) {
 export function sendSong(
   songName: string,
   artists: string,
-  thumbnailUrl: string
+  thumbnailUrl: string,
+  nsfw: boolean
 ) {
   const data = {
     action: "request_song",
     payload: {
       artists,
       name: songName,
-      thumbnail_url: thumbnailUrl
+      thumbnail_url: thumbnailUrl,
+      nsfw
     }
+  };
+  ws.send(JSON.stringify(data));
+}
+
+export function skipSong() {
+  const data = {
+    action: "skip_song",
+    payload: {}
   };
   ws.send(JSON.stringify(data));
 }

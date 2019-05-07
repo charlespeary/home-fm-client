@@ -4,12 +4,18 @@ import { Token, Album, Song, User, CurrentView } from "../Actions/index";
 
 export interface ReduxState {
   token: Token;
-  songs: Song[];
+  // available songs fetched from user's spotify
+  spotifySongs: Song[];
   albums: Album[];
   user: User;
-  previousSongs: Song[];
   activeSong: Song;
+  // to determine whether client connected to websocket or not
   websocketConnected: boolean;
+  // songs currently queued to be played in radio
   songsQueue: Song[];
+  // currently selected view
+  // e.g songs from spotify, songs from radio
   currentView: CurrentView;
+  // songs that are currently saved in radio's db
+  availableSongs: Song[];
 }

@@ -11,5 +11,5 @@ export function setActiveSong(song: Song): StandardAction<Song> {
 }
 
 export function scheduleSong(song: Song) {
-  sendSong(song.name, song.artists, song.thumbnail_url);
+  sendSong(song.name, song.artists, song.thumbnail_url, song.nsfw);
 }

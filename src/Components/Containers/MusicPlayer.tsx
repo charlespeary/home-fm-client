@@ -1,12 +1,13 @@
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
 import React, { Component } from "react";
-import { Song, isObjectEmpty } from "../../Actions/index";
-import { Avatar, Slider } from "antd";
+import { Song, isObjectEmpty, ws } from "../../Actions/index";
+import { Avatar, Slider, Button } from "antd";
 import { Dispatch } from "redux";
 import { ReduxState } from "../../Stores";
 import { connect } from "react-redux";
+import { skipSong } from "../../Actions/websocket";
+import styled from "@emotion/styled";
 type MusicPlayerProps = {
-  previousSongs: Song[];
   activeSong: Song;
 };
 
@@ -46,6 +47,13 @@ const playerTools = css({
   alignItems: "flex-end"
 });
 
+const ButtonContainer = styled.div({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100%"
+});
+
 class MusicPlayer extends Component<MusicPlayerProps> {
   state = {
     progress: 0,
@@ -58,11 +66,23 @@ class MusicPlayer extends Component<MusicPlayerProps> {
     return (
       <div css={musicPlayer}>
         {isSongSet && <ActiveSong activeSong={this.props.activeSong} />}
-        {isSongSet && <SongTimer duration={this.props.activeSong.duration} />}
+        <SkipSongButton />
       </div>
     );
   }
 }
+
+const SkipSongButton = () => (
+  <ButtonContainer>
+    <Button
+      onClick={() => {
+        skipSong();
+      }}
+    >
+      SKIP SONG
+    </Button>
+  </ButtonContainer>
+);
 
 type SongTimerProps = {
   duration: number;
@@ -141,8 +161,7 @@ class ActiveSong extends Component<ActiveSongProps> {
 // Music player's dispatch to props and state to props
 const mapStateToProps = (state: ReduxState) => {
   return {
-    songs: state.songs,
-    previousSongs: state.previousSongs,
+    spotifySongs: state.spotifySongs,
     activeSong: state.activeSong
   };
 };

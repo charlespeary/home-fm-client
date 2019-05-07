@@ -8,7 +8,7 @@ import {
   SongReadiness,
   PlainSong
 } from "./index";
-import { Result, axios } from "../Functions/index";
+import { Result, spotifyConnection } from "../Functions/index";
 import { store } from "../Stores/index";
 import { Dispatch } from "react";
 import { AnyAction } from "redux";
@@ -44,7 +44,7 @@ export async function fetchUserSongs(paginationStatus: PaginationStatus) {
 
   // total number of songs
   let total = 0;
-  const songs = await axios
+  const songs = await spotifyConnection
     .get<SongsRequestData>(
       `/me/tracks?limit=50&offset=${paginationStatus.offset}`,
       {
@@ -66,7 +66,8 @@ export async function fetchUserSongs(paginationStatus: PaginationStatus) {
           duration: track.duration / 1000,
           formatted_name: formatName(track.name, track.artists),
           isReady: SongReadiness.NOT_READY,
-          artists: track.artists.map(artist => artist.name).join(", ")
+          artists: track.artists.map(artist => artist.name).join(", "),
+          nsfw: true
         };
       });
       return { value: songs, error: false } as Result<Song[]>;
