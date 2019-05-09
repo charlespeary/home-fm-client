@@ -3,5 +3,9 @@ export type Result<T> = {
   error: boolean;
 };
 
-export { getAvailableSongs, spotifyConnection } from "./requests";
+export {
+  getAvailableSongs,
+  spotifyConnection,
+  toggleSongNsfw
+} from "./requests";
 export { fetchData } from "./fetchData";

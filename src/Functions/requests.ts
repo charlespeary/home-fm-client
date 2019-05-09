@@ -21,3 +21,9 @@ export async function getAvailableSongs() {
     .get("/songs")
     .then((res: AvailableSongsResponse) => res.data);
 }
+
+export async function toggleSongNsfw(songId: number, isNsfw: boolean) {
+  return apiConnection
+    .put(`/songs/${songId}/${isNsfw}`)
+    .then(res => console.log(res));
+}

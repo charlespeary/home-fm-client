@@ -3,6 +3,7 @@ import { Song, Artist, SongReadiness } from "../../Actions/index";
 import { List, Avatar, Icon, Switch, Button } from "antd";
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
 import styled from "@emotion/styled";
+import { toggleSongNsfw } from "../../Functions/index";
 
 interface SongProps {
   song: Song;
@@ -38,7 +39,7 @@ const ScheduleSongButton = css({
 
 export class SongItem extends Component<SongProps> {
   render() {
-    const { artists, nsfw } = this.props.song;
+    const { artists, nsfw, id } = this.props.song;
 
     return (
       <List.Item className="list-item-song">
@@ -59,11 +60,16 @@ export class SongItem extends Component<SongProps> {
         >
           Schedule
         </Button>
-        {nsfw && (
-          <NsfwSwitch title="is it safe for random play?">
-            <Switch>NSFW</Switch>
-          </NsfwSwitch>
-        )}
+        <NsfwSwitch title="is it safe for random play?">
+          <Switch
+            defaultChecked={nsfw}
+            onChange={(isNsfw: boolean) => {
+              toggleSongNsfw(parseInt(id), isNsfw);
+            }}
+          >
+            NSFW
+          </Switch>
+        </NsfwSwitch>
       </List.Item>
     );
   }
