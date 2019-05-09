@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Song, Artist, SongReadiness } from "../../Actions/index";
-import { List, Avatar, Icon } from "antd";
+import { List, Avatar, Icon, Switch, Button } from "antd";
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
+import styled from "@emotion/styled";
 
 interface SongProps {
   song: Song;
@@ -24,17 +25,23 @@ function formatText(description: string) {
   }
 }
 
+const NsfwSwitch = styled.div({
+  marginRight: "1rem",
+  ".ant-switch-checked": {
+    background: "#e83752"
+  }
+});
+
+const ScheduleSongButton = css({
+  marginRight: "1rem"
+});
+
 export class SongItem extends Component<SongProps> {
   render() {
-    const { artists } = this.props.song;
+    const { artists, nsfw } = this.props.song;
 
     return (
-      <List.Item
-        className="list-item-song"
-        onClick={() => {
-          this.props.setActiveSong(this.props.song);
-        }}
-      >
+      <List.Item className="list-item-song">
         <List.Item.Meta
           avatar={<Avatar src={this.props.song.thumbnail_url} />}
           title={
@@ -44,6 +51,19 @@ export class SongItem extends Component<SongProps> {
           }
           description={formatText(artists)}
         />
+        <Button
+          onClick={() => {
+            this.props.setActiveSong(this.props.song);
+          }}
+          css={ScheduleSongButton}
+        >
+          Schedule
+        </Button>
+        {nsfw && (
+          <NsfwSwitch title="is it safe for random play?">
+            <Switch>NSFW</Switch>
+          </NsfwSwitch>
+        )}
       </List.Item>
     );
   }
@@ -53,12 +73,7 @@ export class SongQueueItem extends Component<SongProps> {
   render() {
     const { artists } = this.props.song;
     return (
-      <List.Item
-        className="list-item-song"
-        onClick={() => {
-          this.props.setActiveSong(this.props.song);
-        }}
-      >
+      <List.Item className="list-item-song">
         <List.Item.Meta
           avatar={<Avatar src={this.props.song.thumbnail_url} />}
           title={
