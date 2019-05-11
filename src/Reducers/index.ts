@@ -1,9 +1,9 @@
 export { token } from "./auth";
 export { user } from "./user";
 export { albums } from "./albums";
-export { spotifySongs } from "./songs";
+export { spotifySongs } from "./spotifySongs";
 export { activeSong } from "./songsState";
 export { websocketConnected } from "./websocket";
-export { songsQueue } from "./songsQueue";
+export { songsQueue } from "./queueSongs";
 export { currentView } from "./currentView";
 export { availableSongs } from "./availableSongs";

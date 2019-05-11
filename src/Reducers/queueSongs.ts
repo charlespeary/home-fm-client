@@ -1,4 +1,5 @@
-import { Action, Song, SongsQueueAction } from "../Actions";
+import { Action, Song } from "../Actions/types";
+import { SongsQueueAction } from "../Actions/queueSongs";
 
 export function songsQueue(
   state: Song[] = [],
@@ -9,7 +10,7 @@ export function songsQueue(
       return state.concat(action.songs);
     case Action.TOGGLE_SONG_IN_QUEUE:
       return state.map((song: Song) => {
-        if (song.name == action.songName) {
+        if (song.name == action.songId) {
           return {
             ...song,
             isReady: action.isReady

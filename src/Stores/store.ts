@@ -14,7 +14,7 @@ import { initialState } from "./index";
 import thunkMiddleware from "redux-thunk";
 import { createLogger } from "redux-logger";
 import { getAvailableSongs } from "../Functions";
-import { saveAvailableSongs } from "../Actions/songsAvailable";
+import { saveAvailableSongs } from "../Actions/availableSongs";
 
 const loggerMiddleware = createLogger();
 

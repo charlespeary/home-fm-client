@@ -2,9 +2,9 @@
 
 import { jsx, css } from "@emotion/core";
 import React, { Component } from "react";
-import { Song, isObjectEmpty, ws } from "../../Actions/index";
+import { isObjectEmpty, ws } from "../../Actions/index";
+import { Song } from "../../Actions/types";
 import { Avatar, Slider, Button } from "antd";
-import { Dispatch } from "redux";
 import { ReduxState } from "../../Stores";
 import { connect } from "react-redux";
 import { skipSong } from "../../Actions/websocket";

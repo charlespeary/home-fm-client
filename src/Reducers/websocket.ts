@@ -1,9 +1,11 @@
-import { StandardAction, Action } from "../Actions/index";
+import { Action } from "../Actions/types";
+import { SocketAction } from "../Actions/websocket";
+
 // websocket connection
 
 export function websocketConnected(
   state: boolean = false,
-  action: StandardAction<boolean>
+  action: SocketAction
 ): boolean {
   switch (action.type) {
     case Action.WS_CONNECTION_FAILED:

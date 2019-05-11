@@ -1,8 +1,15 @@
-import { Action, CurrentView, StandardAction } from ".";
+import { Action, CurrentView } from "./types";
 
-export function setView(view: CurrentView): StandardAction<CurrentView> {
+export type SetView = {
+  type: Action.SET_VIEW;
+  view: CurrentView;
+};
+
+export type CurrentViewAction = SetView;
+
+export function setView(view: CurrentView): CurrentViewAction {
   return {
     type: Action.SET_VIEW,
-    value: view
+    view
   };
 }

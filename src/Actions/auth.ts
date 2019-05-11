@@ -1,13 +1,17 @@
-import {
-  Action,
-  Token,
-  StandardAction,
-  TokenStatus,
-  TokenFromLocalStorage
-} from "./index";
+import { Action, TokenStatus, Token, TokenFromLocalStorage } from "./types";
 import * as localStorage from "store";
 import moment from "moment";
 import { isObjectEmpty } from "./index";
+
+export type SaveToken = {
+  type: Action.SAVE_TOKEN;
+  token: Token;
+};
+export type DeleteToken = {
+  type: Action.DELETE_TOKEN;
+};
+
+export type TokenAction = SaveToken | DeleteToken;
 
 function convertToken(token: TokenFromLocalStorage): Token {
   return {
@@ -18,11 +22,11 @@ function convertToken(token: TokenFromLocalStorage): Token {
   };
 }
 
-export function getTokenFromLocalStorage(): StandardAction<Token> {
+export function getTokenFromLocalStorage(): TokenAction {
   const token: TokenFromLocalStorage = localStorage.get("token", {});
   if (moment(token.expiresAt).isBefore(moment()) || isObjectEmpty(token)) {
     return {
-      value: {
+      token: {
         value: "EXPIRED_TOKEN",
         status: TokenStatus.EXPIRED,
         createdAt: moment(),
@@ -32,30 +36,28 @@ export function getTokenFromLocalStorage(): StandardAction<Token> {
     };
   }
   return {
-    value: convertToken(token),
+    token: convertToken(token),
     type: Action.SAVE_TOKEN
   };
 }
 
-export function saveToken(token: string): StandardAction<Token> {
+export function saveToken(token: string): TokenAction {
   const tokenToSave: Token = {
     value: token,
     status: TokenStatus.OK,
     createdAt: moment(),
     expiresAt: moment().add(3600, "seconds")
   };
-  console.log(tokenToSave);
   // save token in local storage
   localStorage.set("token", tokenToSave);
   return {
-    value: tokenToSave,
+    token: tokenToSave,
     type: Action.SAVE_TOKEN
   };
 }
 
-export function deleteToken(): StandardAction<Token> {
+export function deleteToken(): TokenAction {
   return {
-    value: {} as Token,
     type: Action.DELETE_TOKEN
   };
 }

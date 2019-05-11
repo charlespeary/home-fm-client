@@ -1,6 +1,6 @@
 export { initialState } from "./initialState";
 export { store } from "./store";
-import { Token, Album, Song, User, CurrentView } from "../Actions/index";
+import { Token, Album, Song, User, CurrentView } from "../Actions/types";
 
 export interface ReduxState {
   token: Token;

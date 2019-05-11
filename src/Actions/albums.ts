@@ -1,17 +1,27 @@
-import { Album, StandardAction, Action, RequestData } from "./index";
+import { Action, RequestData, Album } from "./types";
 import { Result, spotifyConnection } from "../Functions/index";
 import { store } from "../Stores/index";
 
-export function saveUserAlbums(albums: Album[]): StandardAction<Album[]> {
+type SaveUserAlbums = {
+  type: Action.SAVE_USER_ALBUMS;
+  albums: Album[];
+};
+
+type AlbumsFetchFailed = {
+  type: Action.ALBUMS_FETCH_FAILED;
+};
+
+export type AlbumsAction = SaveUserAlbums | AlbumsFetchFailed;
+
+export function saveUserAlbums(albums: Album[]): AlbumsAction {
   return {
-    value: albums,
-    type: Action.SAVE_ALBUMS
+    albums,
+    type: Action.SAVE_USER_ALBUMS
   };
 }
 
-export function albumsFetchFailed(): StandardAction<Album[]> {
+export function albumsFetchFailed(): AlbumsAction {
   return {
-    value: [],
     type: Action.ALBUMS_FETCH_FAILED
   };
 }

@@ -1,32 +1,42 @@
-import { StandardAction, Action, Song, SongReadiness } from "./index";
+import { Action, Song, SongReadiness } from "./types";
 import { store } from "../Stores/index";
 import { setActiveSong } from "./activeSong";
 import {
-  toggleSong,
   saveSongsInQueue,
-  deleteRecentActiveSongFromQueue
-} from "./songsQueue";
+  deleteRecentActiveSongFromQueue,
+  toggleQueueSongReadiness
+} from "./index";
 import { notification } from "antd";
+import { toggleSpotifySongReadiness } from "./spotifySongs";
 const ip = window.location.hostname;
 // experimental
 export const ws = new WebSocket(`ws://${ip}:8080/ws/`);
+
 type WSAction = {
   action: string;
   success: boolean;
   value: any;
 };
 
-function setSocketConnected(): StandardAction<boolean> {
+type SocketSuccessfullConection = {
+  type: Action.WS_CONNECTION_SUCCESSFULL;
+};
+
+type SocketConnectionError = {
+  type: Action.WS_CONNECTION_FAILED;
+};
+
+export type SocketAction = SocketSuccessfullConection | SocketConnectionError;
+
+function setSocketConnected(): SocketAction {
   return {
-    type: Action.WS_CONNECTION_SUCCESSFULL,
-    value: true
+    type: Action.WS_CONNECTION_SUCCESSFULL
   };
 }
 
-function setSocketError(): StandardAction<boolean> {
+function setSocketError(): SocketAction {
   return {
-    type: Action.WS_CONNECTION_FAILED,
-    value: false
+    type: Action.WS_CONNECTION_FAILED
   };
 }
 
@@ -94,11 +104,19 @@ ws.onmessage = event => {
       return;
     case "song_download_finished":
       let downloadedSong: Song = data.value;
-      store.dispatch(toggleSong(downloadedSong.name, SongReadiness.READY));
+      store.dispatch(
+        toggleQueueSongReadiness(downloadedSong.id, SongReadiness.READY)
+      );
+      store.dispatch(
+        toggleSpotifySongReadiness(downloadedSong.id, SongReadiness.READY)
+      );
+
       return;
     case "song_download_failed":
       let failedSong: Song = data.value;
-      store.dispatch(toggleSong(failedSong.name, SongReadiness.CANT_DOWNLOAD));
+      store.dispatch(
+        toggleQueueSongReadiness(failedSong.id, SongReadiness.CANT_DOWNLOAD)
+      );
       return;
     case "song_download_started":
       break;

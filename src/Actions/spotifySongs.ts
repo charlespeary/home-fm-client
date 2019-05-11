@@ -1,29 +1,50 @@
-import {
-  Album,
-  StandardAction,
-  Action,
-  Song,
-  SongsRequestData,
-  Artist,
-  SongReadiness,
-  PlainSong
-} from "./index";
+import { Action, Song, SongsRequestData, Artist, SongReadiness } from "./types";
 import { Result, spotifyConnection } from "../Functions/index";
 import { store } from "../Stores/index";
 import { Dispatch } from "react";
 import { AnyAction } from "redux";
 
-export function saveSongs(songs: Song[]): StandardAction<Song[]> {
+type SaveSpotifySongs = {
+  type: Action.SAVE_SPOTIFY_SONGS;
+  songs: Song[];
+};
+
+type SpotifySongsFetchFailed = {
+  type: Action.SPOTIFY_SONGS_FETCH_FAILED;
+};
+
+type ToggleSpotifySongReadiness = {
+  type: Action.TOGGLE_SPOTIFY_SONG_READINESS;
+  songId: string;
+  readiness: SongReadiness;
+};
+
+export type SpotifySongsAction =
+  | SaveSpotifySongs
+  | SpotifySongsFetchFailed
+  | ToggleSpotifySongReadiness;
+
+export function saveSongs(songs: Song[]): SpotifySongsAction {
   return {
-    value: songs,
-    type: Action.SAVE_SONGS
+    songs,
+    type: Action.SAVE_SPOTIFY_SONGS
   };
 }
 
-export function songsFetchFailed(): StandardAction<Album[]> {
+export function songsFetchFailed(): SpotifySongsAction {
   return {
-    value: [],
-    type: Action.SONGS_FETCH_FAILED
+    type: Action.SPOTIFY_SONGS_FETCH_FAILED
+  };
+}
+
+export function toggleSpotifySongReadiness(
+  songId: string,
+  readiness: SongReadiness
+): SpotifySongsAction {
+  return {
+    type: Action.TOGGLE_SPOTIFY_SONG_READINESS,
+    songId,
+    readiness
   };
 }
 
@@ -59,14 +80,16 @@ export async function fetchUserSongs(paginationStatus: PaginationStatus) {
       // unwrap songs from song containers
       const songs: Song[] = data.items.map(item => {
         const { track } = item;
+        const artists = track.artists.map(artist => artist.name).join(", ");
+        const isDownloaded = checkIfSongIsDownloaded(track.name, artists);
         return {
           id: track.id,
           name: track.name,
           thumbnail_url: track.album.images[0].url,
           duration: track.duration / 1000,
           formatted_name: formatName(track.name, track.artists),
-          isReady: SongReadiness.NOT_READY,
-          artists: track.artists.map(artist => artist.name).join(", "),
+          isReady: isDownloaded ? SongReadiness.READY : SongReadiness.NOT_READY,
+          artists,
           nsfw: true
         };
       });
@@ -109,4 +132,14 @@ export async function getUserFavouriteSongs(dispatch: Dispatch<AnyAction>) {
       dispatch(saveSongs(songs));
     }
   }
+}
+
+// check if spotify song is already available in the songs downloaded from the server
+function checkIfSongIsDownloaded(songName: string, artists: string) {
+  const availableSongs = store.getState().availableSongs;
+  return (
+    availableSongs.filter(song => {
+      return song.name === songName && song.artists === artists;
+    }).length > 0
+  );
 }

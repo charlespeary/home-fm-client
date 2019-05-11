@@ -7,29 +7,33 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider, connect } from "react-redux";
 import { Dispatch } from "redux";
 import { store, ReduxState } from "./Stores/index";
-import {
-  saveToken,
-  getTokenFromLocalStorage,
-  Token,
-  TokenStatus
-} from "./Actions/index";
+import { saveToken, getTokenFromLocalStorage } from "./Actions/index";
+import { Token } from "./Actions/types";
 import { RouteComponentProps } from "react-router-dom";
 import {
   MusicPlayer,
-  PlayerContainer,
-  AuthRedirection as AuthRedirectionComponent
+  AuthRedirection as AuthRedirectionComponent,
+  YoutubeSearch,
+  SongList,
+  Config
 } from "./Components/Containers/index";
 import { fetchSpotifyData } from "./Functions";
 import { MainMenu } from "./Components/Presentational/index";
+import styled from "styled-components";
 interface AppProps extends RouteComponentProps {
   getTokenFromLocalStorage: () => void;
   socketConnected: boolean;
   token: Token;
 }
 
+const Container = styled.div({
+  width: "100 %",
+  height: "80vh",
+  background: "#fff"
+});
+
 export const App: FunctionComponent<AppProps> = props => {
   useEffect(() => {
-    console.log(props.token.value);
     props.getTokenFromLocalStorage();
     fetchSpotifyData();
     props.history.push("/songs");
@@ -37,10 +41,14 @@ export const App: FunctionComponent<AppProps> = props => {
   return (
     <div className="App-header">
       <MainMenu />
-      <Switch>
-        <Route exact path="/auth" component={AuthRedirection} />
-        <Route path="/songs" component={PlayerContainer} />
-      </Switch>
+      <Container>
+        <Switch>
+          <Route exact path="/auth" component={AuthRedirection} />
+          <Route path="/songs" component={SongList} />
+          <Route path="/youtube_search" component={YoutubeSearch} />
+          <Route path="/config" component={Config} />
+        </Switch>
+      </Container>
       {props.socketConnected && <MusicPlayer />}
     </div>
   );

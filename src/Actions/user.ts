@@ -1,22 +1,32 @@
-import { Action, User, StandardAction } from "./index";
+import { Action, User } from "./types";
 import { Result, spotifyConnection } from "../Functions/index";
 import { store } from "../Stores/index";
 
-export function saveUserData(user: User): StandardAction<User> {
+type SaveUserData = {
+  user: User;
+  type: Action.SAVE_USER_PROFILE;
+};
+
+type UserFetchFailed = {
+  type: Action.USER_FETCH_FAILED;
+};
+
+export type UserAction = SaveUserData | UserFetchFailed;
+
+export function saveUserData(user: User): UserAction {
   return {
-    value: user,
+    user,
     type: Action.SAVE_USER_PROFILE
   };
 }
 
-export function userFetchFailed(): StandardAction<User> {
+export function userFetchFailed(): UserAction {
   return {
-    value: { display_name: "" },
     type: Action.USER_FETCH_FAILED
   };
 }
 
-export async function getUserInformations(): Promise<StandardAction<User>> {
+export async function getUserInformations(): Promise<UserAction> {
   const user = await fetchUserInformations();
   if (user.error) {
     return userFetchFailed();

@@ -1,17 +1,19 @@
 /** @jsx jsx */
 
 import React, { Component } from "react";
-import { Song, setActiveSong, CurrentView } from "../../Actions/index";
+import { Song, CurrentView, SongReadiness } from "../../Actions/types";
 import { SongItem } from "../Presentational/index";
 import { connect } from "react-redux";
 import { ReduxState } from "../../Stores/index";
 import { List, Menu, Input, notification } from "antd";
 import { Dispatch } from "redux";
-import { addSongsToQueue } from "../../Actions/songsQueue";
 import { SongQueueItem, SpotifySongItem } from "../Presentational/index";
 import { jsx, css } from "@emotion/core";
-import { scheduleSong } from "../../Actions/activeSong";
-import styled from "@emotion/styled";
+import {
+  scheduleSong,
+  toggleSpotifySongReadiness,
+  addSongsToQueue
+} from "../../Actions/index";
 import { LoginToSpotify } from "./Login";
 
 const Search = Input.Search;
@@ -20,6 +22,7 @@ type SongListProps = {
   availableSongs: Song[];
   songsQueue: Song[];
   setActiveSong: (song: Song) => void;
+  toggleSongReadiness: (songId: string, songReadiness: SongReadiness) => void;
   currentView: CurrentView;
 };
 
@@ -123,6 +126,7 @@ class SongList extends Component<SongListProps, SongListState> {
                 case CurrentView.SpotifySongs:
                   return (
                     <SpotifySongItem
+                      toggleSongReadiness={this.props.toggleSongReadiness}
                       setActiveSong={this.props.setActiveSong}
                       song={song}
                     />
@@ -138,7 +142,7 @@ class SongList extends Component<SongListProps, SongListState> {
             }}
             pagination={{
               total: songs.length,
-              pageSize: window.innerHeight / 110,
+              pageSize: window.innerHeight / 115,
               simple: true,
               showQuickJumper: true
             }}
@@ -169,6 +173,9 @@ const dispatchToProps = (dispatch: Dispatch) => {
       });
       scheduleSong(song);
       dispatch(addSongsToQueue([song]));
+    },
+    toggleSongReadiness: (songId: string, readiness: SongReadiness) => {
+      dispatch(toggleSpotifySongReadiness(songId, readiness));
     }
   };
 };

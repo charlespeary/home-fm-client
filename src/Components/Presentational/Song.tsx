@@ -1,7 +1,7 @@
 /** @jsx jsx */
 
 import React, { Component } from "react";
-import { Song, Artist, SongReadiness } from "../../Actions/index";
+import { Song, Artist, SongReadiness } from "../../Actions/types";
 import { List, Avatar, Icon, Switch, Button } from "antd";
 import { jsx, css } from "@emotion/core";
 import styled from "@emotion/styled";
@@ -34,11 +34,6 @@ const NsfwSwitch = styled.div({
     background: "#e83752"
   }
 });
-
-const ScheduleSongButton = css({
-  marginRight: "1rem"
-});
-
 export class SongItem extends Component<SongProps> {
   render() {
     const { artists, nsfw, id } = this.props.song;
@@ -97,9 +92,17 @@ export class SongQueueItem extends Component<SongProps> {
   }
 }
 
-export class SpotifySongItem extends Component<SongProps> {
+const ScheduleSongButton = css({
+  marginRight: "1rem"
+});
+
+type SpotifySongProps = {
+  toggleSongReadiness: (songId: string, readiness: SongReadiness) => void;
+};
+export class SpotifySongItem extends Component<SongProps & SpotifySongProps> {
   render() {
-    const { artists } = this.props.song;
+    const { artists, isReady, id } = this.props.song;
+
     return (
       <List.Item className="list-item-song">
         <List.Item.Meta
@@ -112,20 +115,31 @@ export class SpotifySongItem extends Component<SongProps> {
           description={formatText(artists)}
         />
         <Button
+          loading={isReady === SongReadiness.DOWNLOADING}
           onClick={() => {
+            // if song isn't already downloaded, activate loading on it until server is done downloading it
+            if (isReady !== SongReadiness.READY) {
+              this.props.toggleSongReadiness(id, SongReadiness.DOWNLOADING);
+            }
             this.props.setActiveSong(this.props.song);
           }}
-          css={ScheduleSongButton}
+          css={[
+            ScheduleSongButton,
+            // if song is available on the server already - paint this button green
+            {
+              background:
+                isReady === SongReadiness.READY ? "#56e27a" : "initial"
+            }
+          ]}
         >
-          Download and schedule
+          {isReady === SongReadiness.READY
+            ? "Schedule"
+            : "Download and schedule"}
         </Button>
       </List.Item>
     );
   }
 }
-const progress = css({
-  fontSize: 24
-});
 
 const failed = css({
   color: "#ba252f"
@@ -136,7 +150,8 @@ const success = css({
 });
 
 const progressBar = css({
-  marginRight: "1rem"
+  marginRight: "1rem",
+  fontSize: 24
 });
 
 function formatProgress(readiness: SongReadiness) {
@@ -146,19 +161,24 @@ function formatProgress(readiness: SongReadiness) {
         <Icon
           title="Song can't be downloaded"
           type="close-circle"
-          css={[progress, failed, progressBar]}
+          css={[failed, progressBar]}
         />
       );
     case SongReadiness.NOT_READY:
       return (
-        <Icon title="Downloading song" type="loading" css={progress} spin />
+        <Icon
+          title="Downloading song"
+          type="loading"
+          css={[progressBar]}
+          spin
+        />
       );
     case SongReadiness.READY:
       return (
         <Icon
           type="check-circle"
           title="Song successfully downloaded"
-          css={[progress, success]}
+          css={[success, progressBar]}
         />
       );
   }

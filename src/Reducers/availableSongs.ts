@@ -1,12 +1,13 @@
-import { Action, Token, StandardAction, Song } from "../Actions/index";
+import { Action, Song } from "../Actions/types";
+import { AvailableSongsAction } from "../Actions/availableSongs";
 
 export function availableSongs(
   state: Song[] = [],
-  action: StandardAction<Song[]>
+  action: AvailableSongsAction
 ): Song[] {
   switch (action.type) {
     case Action.SAVE_AVAILABLE_SONGS:
-      return action.value;
+      return action.songs;
     default:
       return state;
   }

@@ -3,7 +3,7 @@ import { jsx, css } from "@emotion/core";
 
 import React, { FunctionComponent } from "react";
 import { Menu } from "antd";
-import { CurrentView } from "../../Actions";
+import { CurrentView } from "../../Actions/types";
 import { ReduxState } from "../../Stores";
 import { Dispatch } from "redux";
 import { setView } from "../../Actions/currentView";
@@ -52,7 +52,7 @@ const MenuComponent: FunctionComponent<MenuProps> = (props: MenuProps) => {
         <Link to="/songs">Available songs</Link>
       </Menu.Item>
       <Menu.Item key={CurrentView.YoutubeSearch}>
-        <Link to="/songs/youtube_search">Search on youtube</Link>
+        <Link to="/youtube_search">Search on youtube</Link>
       </Menu.Item>
       <Menu.Item key={CurrentView.Config}>
         <Link to="/config">Config</Link>

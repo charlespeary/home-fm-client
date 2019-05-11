@@ -7,12 +7,8 @@ import styled from "@emotion/styled";
 import { useState } from "react";
 import { FormComponentProps } from "antd/lib/form";
 import { store } from "../../Stores/index";
-import {
-  addSongsToQueue,
-  Song,
-  SongReadiness,
-  scheduleSong
-} from "../../Actions/index";
+import { Song, SongReadiness } from "../../Actions/types";
+import { addSongsToQueue, scheduleSong } from "../../Actions/index";
 
 const SearchContainer = styled.div({
   margin: "auto",

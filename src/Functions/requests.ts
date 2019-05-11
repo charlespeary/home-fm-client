@@ -1,12 +1,8 @@
 import axios from "axios";
-import {
-  Song,
-  Token,
-  getUserFavouriteSongs,
-  getUserInformations
-} from "../Actions/index";
+import { getUserFavouriteSongs, getUserInformations } from "../Actions/index";
+import { Song } from "../Actions/types";
 import { store } from "../Stores/index";
-import { saveUserAlbums, getUserAlbums } from "../Actions/albums";
+import { getUserAlbums } from "../Actions/albums";
 export const spotifyConnection = axios.create({
   baseURL: "https://api.spotify.com/v1"
 });

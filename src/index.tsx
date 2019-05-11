@@ -9,7 +9,7 @@ import * as serviceWorker from "./serviceWorker";
 import { notification } from "antd";
 // configure antd notification, set it to the bottom right
 notification.config({
-  placement: "bottomRight",
+  placement: "topRight",
   bottom: -5
 });
 

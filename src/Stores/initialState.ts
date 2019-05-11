@@ -1,4 +1,4 @@
-import { Song, User, Token, CurrentView } from "../Actions/index";
+import { Song, User, Token, CurrentView } from "../Actions/types";
 import { ReduxState } from "./index";
 
 export const initialState: ReduxState = {
