@@ -1,6 +1,8 @@
-import { Input, notification, Form, Button, Switch } from "antd";
-/** @jsx jsx */ import { jsx, css } from "@emotion/core";
+/** @jsx jsx */
 
+import { jsx, css } from "@emotion/core";
+import { Input, notification, Form, Button, Switch } from "antd";
+import React from "react";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { FormComponentProps } from "antd/lib/form";
@@ -14,8 +16,11 @@ import {
 
 const SearchContainer = styled.div({
   margin: "auto",
-  marginTop: "0.7rem",
   width: "95%"
+});
+
+const SearchForm = css({
+  paddingTop: "0.7rem"
 });
 
 export const YoutubeSearch = () => {
@@ -32,6 +37,7 @@ type FormValues = {
   songName: string;
   nsfw: boolean;
 };
+
 const SongSearch = (props: SongSearchProps & FormComponentProps) => {
   const { getFieldDecorator } = props.form;
   // flag to stop form for a second after submit
@@ -39,6 +45,7 @@ const SongSearch = (props: SongSearchProps & FormComponentProps) => {
 
   return (
     <Form
+      css={SearchForm}
       onSubmit={e => {
         // validate form and prevent default from refreshing the page
         e.preventDefault();

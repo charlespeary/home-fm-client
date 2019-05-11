@@ -1,10 +1,18 @@
+/** @jsx jsx */
+import { jsx, css } from "@emotion/core";
+
 import React, { Component, FunctionComponent, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider, connect } from "react-redux";
 import { Dispatch } from "redux";
 import { store, ReduxState } from "./Stores/index";
-import { saveToken, getTokenFromLocalStorage, Token } from "./Actions/index";
+import {
+  saveToken,
+  getTokenFromLocalStorage,
+  Token,
+  TokenStatus
+} from "./Actions/index";
 import { RouteComponentProps } from "react-router-dom";
 import {
   MusicPlayer,
@@ -12,6 +20,7 @@ import {
   AuthRedirection as AuthRedirectionComponent
 } from "./Components/Containers/index";
 import { fetchSpotifyData } from "./Functions";
+import { MainMenu } from "./Components/Presentational/index";
 interface AppProps extends RouteComponentProps {
   getTokenFromLocalStorage: () => void;
   socketConnected: boolean;
@@ -20,12 +29,14 @@ interface AppProps extends RouteComponentProps {
 
 export const App: FunctionComponent<AppProps> = props => {
   useEffect(() => {
+    console.log(props.token.value);
     props.getTokenFromLocalStorage();
     fetchSpotifyData();
     props.history.push("/songs");
   }, [props.token.value]);
   return (
     <div className="App-header">
+      <MainMenu />
       <Switch>
         <Route exact path="/auth" component={AuthRedirection} />
         <Route path="/songs" component={PlayerContainer} />

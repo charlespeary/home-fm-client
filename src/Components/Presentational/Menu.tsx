@@ -1,3 +1,6 @@
+/** @jsx jsx */
+import { jsx, css } from "@emotion/core";
+
 import React, { FunctionComponent } from "react";
 import { Menu } from "antd";
 import { CurrentView } from "../../Actions";
@@ -22,6 +25,8 @@ function convertEnum(key: string): CurrentView {
       return CurrentView.YoutubeSearch;
     case "AvailableSongs":
       return CurrentView.AvailableSongs;
+    case "Config":
+      return CurrentView.Config;
     default:
       return CurrentView.AvailableSongs;
   }
@@ -33,8 +38,6 @@ const MenuComponent: FunctionComponent<MenuProps> = (props: MenuProps) => {
       onSelect={e => {
         let view = convertEnum(e.key);
         // if I remove this console.log "React is not defined" error occurs xD
-        // To investigate
-        console.log(view);
         props.setView(view);
       }}
       mode="horizontal"
@@ -50,6 +53,9 @@ const MenuComponent: FunctionComponent<MenuProps> = (props: MenuProps) => {
       </Menu.Item>
       <Menu.Item key={CurrentView.YoutubeSearch}>
         <Link to="/songs/youtube_search">Search on youtube</Link>
+      </Menu.Item>
+      <Menu.Item key={CurrentView.Config}>
+        <Link to="/config">Config</Link>
       </Menu.Item>
     </Menu>
   );

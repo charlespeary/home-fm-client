@@ -1,3 +1,6 @@
+/** @jsx jsx */
+import { jsx, css } from "@emotion/core";
+
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";

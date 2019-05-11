@@ -1,7 +1,9 @@
+/** @jsx jsx */
+
 import React, { Component } from "react";
 import { Song, Artist, SongReadiness } from "../../Actions/index";
 import { List, Avatar, Icon, Switch, Button } from "antd";
-/** @jsx jsx */ import { jsx, css } from "@emotion/core";
+import { jsx, css } from "@emotion/core";
 import styled from "@emotion/styled";
 import { toggleSongNsfw } from "../../Functions/index";
 

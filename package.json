@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/core": "^10.0.10",
+    "@emotion/core": "10.0.10",
     "@emotion/styled": "^10.0.11",
     "@types/antd": "^1.0.0",
     "@types/axios": "^0.14.0",
@@ -21,6 +21,7 @@
     "@types/redux-logger": "^3.0.7",
     "@types/request": "^2.48.1",
     "@types/store": "^2.0.1",
+    "@types/styled-components": "^4.1.14",
     "antd": "^3.17.0",
     "connected-react-router": "^6.4.0",
     "mobx": "^5.9.4",
@@ -43,6 +44,7 @@
     "redux-thunk": "^2.3.0",
     "request": "^2.88.0",
     "store": "^2.0.12",
+    "styled-components": "^4.2.0",
     "typescript": "3.3.3"
   },
   "scripts": {

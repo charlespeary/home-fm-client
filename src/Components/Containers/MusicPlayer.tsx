@@ -1,4 +1,6 @@
-/** @jsx jsx */ import { jsx, css } from "@emotion/core";
+/** @jsx jsx */
+
+import { jsx, css } from "@emotion/core";
 import React, { Component } from "react";
 import { Song, isObjectEmpty, ws } from "../../Actions/index";
 import { Avatar, Slider, Button } from "antd";

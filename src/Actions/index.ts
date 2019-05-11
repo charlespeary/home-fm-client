@@ -173,5 +173,6 @@ export enum CurrentView {
   SpotifySongs = "SpotifySongs",
   QueueSongs = "QueueSongs",
   AvailableSongs = "AvailableSongs",
-  YoutubeSearch = "YoutubeSearch"
+  YoutubeSearch = "YoutubeSearch",
+  Config = "Config"
 }

@@ -1,3 +1,5 @@
+/** @jsx jsx */
+
 import React, { Component } from "react";
 import { Song, setActiveSong, CurrentView } from "../../Actions/index";
 import { SongItem } from "../Presentational/index";
@@ -7,7 +9,7 @@ import { List, Menu, Input, notification } from "antd";
 import { Dispatch } from "redux";
 import { addSongsToQueue } from "../../Actions/songsQueue";
 import { SongQueueItem, SpotifySongItem } from "../Presentational/index";
-/** @jsx jsx */ import { jsx, css } from "@emotion/core";
+import { jsx, css } from "@emotion/core";
 import { scheduleSong } from "../../Actions/activeSong";
 import styled from "@emotion/styled";
 import { LoginToSpotify } from "./Login";
@@ -28,10 +30,6 @@ type SongListState = {
   window_width: number;
   searchbarValue: string;
 };
-
-const ListContainer = styled.div({
-  marginTop: "0.7rem"
-});
 
 class SongList extends Component<SongListProps, SongListState> {
   state = {
@@ -71,7 +69,7 @@ class SongList extends Component<SongListProps, SongListState> {
     })();
 
     return (
-      <ListContainer>
+      <div>
         <Search
           css={{
             ".ant-input-suffix": {
@@ -146,7 +144,7 @@ class SongList extends Component<SongListProps, SongListState> {
             }}
           />
         </span>
-      </ListContainer>
+      </div>
     );
   }
 }

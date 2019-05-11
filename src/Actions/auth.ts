@@ -44,9 +44,9 @@ export function saveToken(token: string): StandardAction<Token> {
     createdAt: moment(),
     expiresAt: moment().add(3600, "seconds")
   };
+  console.log(tokenToSave);
   // save token in local storage
   localStorage.set("token", tokenToSave);
-  // tell spotifyConnection about new token
   return {
     value: tokenToSave,
     type: Action.SAVE_TOKEN
