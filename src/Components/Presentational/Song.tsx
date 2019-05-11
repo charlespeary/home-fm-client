@@ -95,6 +95,32 @@ export class SongQueueItem extends Component<SongProps> {
   }
 }
 
+export class SpotifySongItem extends Component<SongProps> {
+  render() {
+    const { artists } = this.props.song;
+    return (
+      <List.Item className="list-item-song">
+        <List.Item.Meta
+          avatar={<Avatar src={this.props.song.thumbnail_url} />}
+          title={
+            <span className="song-name">
+              {formatText(this.props.song.name)}
+            </span>
+          }
+          description={formatText(artists)}
+        />
+        <Button
+          onClick={() => {
+            this.props.setActiveSong(this.props.song);
+          }}
+          css={ScheduleSongButton}
+        >
+          Download and schedule
+        </Button>
+      </List.Item>
+    );
+  }
+}
 const progress = css({
   fontSize: 24
 });
@@ -107,6 +133,10 @@ const success = css({
   color: "#15c455"
 });
 
+const progressBar = css({
+  marginRight: "1rem"
+});
+
 function formatProgress(readiness: SongReadiness) {
   switch (readiness) {
     case SongReadiness.CANT_DOWNLOAD:
@@ -114,7 +144,7 @@ function formatProgress(readiness: SongReadiness) {
         <Icon
           title="Song can't be downloaded"
           type="close-circle"
-          css={[progress, failed]}
+          css={[progress, failed, progressBar]}
         />
       );
     case SongReadiness.NOT_READY:

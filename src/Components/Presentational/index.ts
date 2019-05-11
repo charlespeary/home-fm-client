@@ -1,1 +1,6 @@
-export { SongItem, formatArtists } from "./Song";
+export {
+  SongItem,
+  formatArtists,
+  SpotifySongItem,
+  SongQueueItem
+} from "./Song";

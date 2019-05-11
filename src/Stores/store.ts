@@ -34,7 +34,7 @@ const app = combineReducers({
 export const store = createStore(
   app,
   initialState,
-  applyMiddleware(loggerMiddleware, thunkMiddleware)
+  applyMiddleware(thunkMiddleware)
 );
 
 // fetch data from API

@@ -170,8 +170,8 @@ export type SongsState = {
 };
 
 export enum CurrentView {
-  SongList = "SongList",
-  SongQueue = "SongQueue",
+  SpotifySongs = "SpotifySongs",
+  QueueSongs = "QueueSongs",
   AvailableSongs = "AvailableSongs",
   YoutubeSearch = "YoutubeSearch"
 }

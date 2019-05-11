@@ -1,6 +1,6 @@
 import { StandardAction, CurrentView, Action } from "../Actions/index";
 export function currentView(
-  state: CurrentView = CurrentView.SongList,
+  state: CurrentView = CurrentView.AvailableSongs,
   action: StandardAction<CurrentView>
 ): CurrentView {
   switch (action.type) {

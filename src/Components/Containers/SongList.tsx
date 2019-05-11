@@ -6,7 +6,7 @@ import { ReduxState } from "../../Stores/index";
 import { List, Menu, Input, notification } from "antd";
 import { Dispatch } from "redux";
 import { addSongsToQueue } from "../../Actions/songsQueue";
-import { SongQueueItem } from "../Presentational/Song";
+import { SongQueueItem, SpotifySongItem } from "../Presentational/index";
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
 import { scheduleSong } from "../../Actions/activeSong";
 import styled from "@emotion/styled";
@@ -19,11 +19,6 @@ type SongListProps = {
   setActiveSong: (song: Song) => void;
   currentView: CurrentView;
 };
-
-enum SelectedList {
-  YourSongs = "YourSongs",
-  SongsQueue = "SongsQueue"
-}
 
 type SongListState = {
   offset: number;
@@ -43,7 +38,6 @@ class SongList extends Component<SongListProps, SongListState> {
     currentPage: 1,
     window_height: window.innerHeight,
     window_width: window.innerWidth,
-    selectedList: SelectedList.YourSongs,
     searchbarValue: ""
   };
 
@@ -64,9 +58,9 @@ class SongList extends Component<SongListProps, SongListState> {
   render() {
     const songs = (() => {
       switch (this.props.currentView) {
-        case CurrentView.SongQueue:
+        case CurrentView.QueueSongs:
           return this.getData(this.props.songsQueue);
-        case CurrentView.SongList:
+        case CurrentView.SpotifySongs:
           return this.getData(this.props.spotifySongs);
         case CurrentView.AvailableSongs:
           return this.getData(this.props.availableSongs);
@@ -74,12 +68,15 @@ class SongList extends Component<SongListProps, SongListState> {
           return this.getData(this.props.availableSongs);
       }
     })();
-    this.props.currentView === CurrentView.SongQueue
-      ? this.getData(this.props.songsQueue)
-      : this.getData(this.props.availableSongs);
+
     return (
       <ListContainer>
         <Search
+          css={{
+            ".ant-input-suffix": {
+              marginRight: "1rem"
+            }
+          }}
           placeholder="filter songs..."
           size="default"
           name="domains"
@@ -97,30 +94,42 @@ class SongList extends Component<SongListProps, SongListState> {
         <span>
           <List
             locale={{
-              emptyText:
-                this.props.currentView === CurrentView.SongQueue
-                  ? "There are no songs scheduled in the queue"
-                  : "There are no favourite songs in your spotify account."
+              emptyText: "There are no songs available"
             }}
             bordered={false}
             size={"large"}
             itemLayout="horizontal"
             dataSource={songs}
             renderItem={(song: Song) => {
-              if (this.props.currentView === CurrentView.SongQueue) {
-                return (
-                  <SongQueueItem
-                    setActiveSong={this.props.setActiveSong}
-                    song={song}
-                  />
-                );
-              } else {
-                return (
-                  <SongItem
-                    setActiveSong={this.props.setActiveSong}
-                    song={song}
-                  />
-                );
+              switch (this.props.currentView) {
+                case CurrentView.QueueSongs:
+                  return (
+                    <SongQueueItem
+                      setActiveSong={this.props.setActiveSong}
+                      song={song}
+                    />
+                  );
+                case CurrentView.AvailableSongs:
+                  return (
+                    <SongItem
+                      setActiveSong={this.props.setActiveSong}
+                      song={song}
+                    />
+                  );
+                case CurrentView.SpotifySongs:
+                  return (
+                    <SpotifySongItem
+                      setActiveSong={this.props.setActiveSong}
+                      song={song}
+                    />
+                  );
+                default:
+                  return (
+                    <SongItem
+                      setActiveSong={this.props.setActiveSong}
+                      song={song}
+                    />
+                  );
               }
             }}
             pagination={{

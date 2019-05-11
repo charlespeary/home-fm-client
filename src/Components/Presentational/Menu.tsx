@@ -14,16 +14,16 @@ type MenuProps = {
 
 function convertEnum(key: string): CurrentView {
   switch (key) {
-    case "SongList":
-      return CurrentView.SongList;
-    case "SongQueue":
-      return CurrentView.SongQueue;
+    case "SpotifySongs":
+      return CurrentView.SpotifySongs;
+    case "QueueSongs":
+      return CurrentView.QueueSongs;
     case "YoutubeSearch":
       return CurrentView.YoutubeSearch;
     case "AvailableSongs":
       return CurrentView.AvailableSongs;
     default:
-      return CurrentView.SongList;
+      return CurrentView.AvailableSongs;
   }
 }
 
@@ -32,14 +32,17 @@ const MenuComponent: FunctionComponent<MenuProps> = (props: MenuProps) => {
     <Menu
       onSelect={e => {
         let view = convertEnum(e.key);
+        // if I remove this console.log "React is not defined" error occurs xD
+        // To investigate
+        console.log(view);
         props.setView(view);
       }}
       mode="horizontal"
     >
-      <Menu.Item key={CurrentView.SongList}>
+      <Menu.Item key={CurrentView.SpotifySongs}>
         <Link to="/songs">Spotify songs</Link>
       </Menu.Item>
-      <Menu.Item key={CurrentView.SongQueue}>
+      <Menu.Item key={CurrentView.QueueSongs}>
         <Link to="/songs">Songs queue</Link>
       </Menu.Item>
       <Menu.Item key={CurrentView.AvailableSongs}>
