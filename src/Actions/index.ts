@@ -2,10 +2,10 @@ import { Moment } from "moment";
 
 export { saveToken, deleteToken, getTokenFromLocalStorage } from "./auth";
 export { fetchUserAlbums, getUserAlbums } from "./albums";
-export { getUserFavouriteSongs } from "./songs";
+export { getUserFavouriteSongs, fetchUserSongs } from "./songs";
 export { setActiveSong, scheduleSong } from "./activeSong";
 export { randomNumber, isObjectEmpty } from "./functions";
-export { getUserInformations } from "./user";
+export { getUserInformations, fetchUserInformations } from "./user";
 export { ws } from "./websocket";
 export { addSongsToQueue } from "./songsQueue";
 

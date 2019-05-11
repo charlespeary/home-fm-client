@@ -10,6 +10,7 @@ import { SongQueueItem, SpotifySongItem } from "../Presentational/index";
 /** @jsx jsx */ import { jsx, css } from "@emotion/core";
 import { scheduleSong } from "../../Actions/activeSong";
 import styled from "@emotion/styled";
+import { LoginToSpotify } from "./Login";
 
 const Search = Input.Search;
 type SongListProps = {
@@ -94,7 +95,12 @@ class SongList extends Component<SongListProps, SongListState> {
         <span>
           <List
             locale={{
-              emptyText: "There are no songs available"
+              emptyText:
+                this.props.currentView === CurrentView.SpotifySongs ? (
+                  <LoginToSpotify />
+                ) : (
+                  "There are no songs available"
+                )
             }}
             bordered={false}
             size={"large"}

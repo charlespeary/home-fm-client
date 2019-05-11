@@ -6,6 +6,7 @@ export type Result<T> = {
 export {
   getAvailableSongs,
   spotifyConnection,
-  toggleSongNsfw
+  toggleSongNsfw,
+  fetchSpotifyData
 } from "./requests";
 export { fetchData } from "./fetchData";

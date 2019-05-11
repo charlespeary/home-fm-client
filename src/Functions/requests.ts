@@ -1,5 +1,12 @@
 import axios from "axios";
-import { Song } from "../Actions/index";
+import {
+  Song,
+  Token,
+  getUserFavouriteSongs,
+  getUserInformations
+} from "../Actions/index";
+import { store } from "../Stores/index";
+import { saveUserAlbums, getUserAlbums } from "../Actions/albums";
 export const spotifyConnection = axios.create({
   baseURL: "https://api.spotify.com/v1"
 });
@@ -26,4 +33,13 @@ export async function toggleSongNsfw(songId: number, isNsfw: boolean) {
   return apiConnection
     .put(`/songs/${songId}/${isNsfw}`)
     .then(res => console.log(res));
+}
+
+// get user data from spotify and save it in the store
+export async function fetchSpotifyData() {
+  const userInformations = await getUserInformations();
+  const userAlbums = await getUserAlbums();
+  store.dispatch(userInformations);
+  store.dispatch(userAlbums);
+  const userSongs = await getUserFavouriteSongs(store.dispatch);
 }
