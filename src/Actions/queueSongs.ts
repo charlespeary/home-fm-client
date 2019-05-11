@@ -1,9 +1,10 @@
 import { Action, Song, SongReadiness } from "./types";
 
 export type ToggleQueueSongReadiness = {
-  type: Action.TOGGLE_SONG_IN_QUEUE;
+  type: Action.TOGGLE_QUEUE_SONG_READINESS;
   isReady: SongReadiness;
-  songId: string;
+  // song name + artists separated by ", "
+  songFormattedName: string;
 };
 
 export type DeleteRecentActiveSong = {
@@ -48,12 +49,12 @@ export function deleteRecentActiveSongFromQueue(): SongsQueueAction {
 
 // toggle song
 export function toggleQueueSongReadiness(
-  songId: string,
+  songFormattedName: string,
   isReady: SongReadiness
 ): SongsQueueAction {
   return {
-    type: Action.TOGGLE_SONG_IN_QUEUE,
+    type: Action.TOGGLE_QUEUE_SONG_READINESS,
     isReady,
-    songId
+    songFormattedName
   };
 }

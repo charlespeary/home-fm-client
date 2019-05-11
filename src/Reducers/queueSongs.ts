@@ -8,9 +8,9 @@ export function songsQueue(
   switch (action.type) {
     case Action.ADD_SONGS_TO_QUEUE:
       return state.concat(action.songs);
-    case Action.TOGGLE_SONG_IN_QUEUE:
+    case Action.TOGGLE_QUEUE_SONG_READINESS:
       return state.map((song: Song) => {
-        if (song.name == action.songId) {
+        if (song.formatted_name == action.songFormattedName) {
           return {
             ...song,
             isReady: action.isReady

@@ -15,7 +15,8 @@ type SpotifySongsFetchFailed = {
 
 type ToggleSpotifySongReadiness = {
   type: Action.TOGGLE_SPOTIFY_SONG_READINESS;
-  songId: string;
+  // song name + artists separated by ", "
+  songFormattedName: string;
   readiness: SongReadiness;
 };
 
@@ -38,12 +39,12 @@ export function songsFetchFailed(): SpotifySongsAction {
 }
 
 export function toggleSpotifySongReadiness(
-  songId: string,
+  songFormattedName: string,
   readiness: SongReadiness
 ): SpotifySongsAction {
   return {
     type: Action.TOGGLE_SPOTIFY_SONG_READINESS,
-    songId,
+    songFormattedName,
     readiness
   };
 }

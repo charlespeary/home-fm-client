@@ -13,7 +13,7 @@ export function spotifySongs(
     case Action.TOGGLE_SPOTIFY_SONG_READINESS:
       // find song with given ID and change it's readiness
       return state.map(song => {
-        if (song.id === action.songId) {
+        if (song.formatted_name === action.songFormattedName) {
           return Object.assign({}, song, { isReady: action.readiness });
         } else {
           return song;

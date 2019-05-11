@@ -22,7 +22,10 @@ type SongListProps = {
   availableSongs: Song[];
   songsQueue: Song[];
   setActiveSong: (song: Song) => void;
-  toggleSongReadiness: (songId: string, songReadiness: SongReadiness) => void;
+  toggleSongReadiness: (
+    songFormattedName: string,
+    songReadiness: SongReadiness
+  ) => void;
   currentView: CurrentView;
 };
 

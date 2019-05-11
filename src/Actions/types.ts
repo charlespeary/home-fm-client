@@ -138,8 +138,8 @@ export enum Action {
   // save available songs
   SAVE_AVAILABLE_SONGS,
   // toggle song readiness,
-  TOGGLE_READINESS,
   SAVE_SPOTIFY_SONGS,
   //
-  TOGGLE_SPOTIFY_SONG_READINESS
+  TOGGLE_SPOTIFY_SONG_READINESS,
+  TOGGLE_QUEUE_SONG_READINESS
 }

@@ -87,7 +87,13 @@ ws.onmessage = event => {
   switch (data.action) {
     case "next_song":
       const songData: NextSong = data.value;
-      const nextSong = songData.next_song;
+      // imit formatted name
+      const nextSong: Song = {
+        ...songData.next_song,
+        formatted_name: `${songData.next_song.name} - ${
+          songData.next_song.artists
+        }`
+      };
       notification.open({
         message: "Now playing",
         description: `${nextSong.name} - ${nextSong.artists}`
@@ -103,19 +109,41 @@ ws.onmessage = event => {
       store.dispatch(setActiveSong(activeSong));
       return;
     case "song_download_finished":
-      let downloadedSong: Song = data.value;
+      const downloadedSongData: Data<Song> = data;
+      // imit formatted name
+      let downloadedSong: Song = {
+        ...downloadedSongData.value,
+        formatted_name: `${downloadedSongData.value.name} - ${
+          downloadedSongData.value.artists
+        }`
+      };
       store.dispatch(
-        toggleQueueSongReadiness(downloadedSong.id, SongReadiness.READY)
+        toggleQueueSongReadiness(
+          downloadedSong.formatted_name,
+          SongReadiness.READY
+        )
       );
       store.dispatch(
-        toggleSpotifySongReadiness(downloadedSong.id, SongReadiness.READY)
+        toggleSpotifySongReadiness(
+          downloadedSong.formatted_name,
+          SongReadiness.READY
+        )
       );
 
       return;
     case "song_download_failed":
       let failedSong: Song = data.value;
       store.dispatch(
-        toggleQueueSongReadiness(failedSong.id, SongReadiness.CANT_DOWNLOAD)
+        toggleQueueSongReadiness(
+          failedSong.formatted_name,
+          SongReadiness.CANT_DOWNLOAD
+        )
+      );
+      store.dispatch(
+        toggleSpotifySongReadiness(
+          failedSong.formatted_name,
+          SongReadiness.CANT_DOWNLOAD
+        )
       );
       return;
     case "song_download_started":

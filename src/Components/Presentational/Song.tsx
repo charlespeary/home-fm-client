@@ -97,7 +97,10 @@ const ScheduleSongButton = css({
 });
 
 type SpotifySongProps = {
-  toggleSongReadiness: (songId: string, readiness: SongReadiness) => void;
+  toggleSongReadiness: (
+    songFormattedName: string,
+    readiness: SongReadiness
+  ) => void;
 };
 export class SpotifySongItem extends Component<SongProps & SpotifySongProps> {
   render() {
@@ -119,7 +122,10 @@ export class SpotifySongItem extends Component<SongProps & SpotifySongProps> {
           onClick={() => {
             // if song isn't already downloaded, activate loading on it until server is done downloading it
             if (isReady !== SongReadiness.READY) {
-              this.props.toggleSongReadiness(id, SongReadiness.DOWNLOADING);
+              this.props.toggleSongReadiness(
+                this.props.song.formatted_name,
+                SongReadiness.DOWNLOADING
+              );
             }
             this.props.setActiveSong(this.props.song);
           }}
