@@ -1,5 +1,6 @@
 import { Action, Song } from "../Actions/types";
 import { SongsQueueAction } from "../Actions/queueSongs";
+import { getSongFormattedName } from "../Actions";
 
 export function songsQueue(
   state: Song[] = [],
@@ -19,6 +20,16 @@ export function songsQueue(
           return song;
         }
       });
+    case Action.SAVE_QUEUE_SONG_UUID:
+      return state.map(song => {
+        if (getSongFormattedName(song) === action.songFormattedName) {
+          return Object.assign({}, song, { uuid: action.uuid });
+        } else {
+          return song;
+        }
+      });
+    case Action.DELETE_SONG_FROM_QUEUE:
+      return state.filter(song => song.uuid !== action.songUuid);
     // this overrides whole array of songs
     case Action.SAVE_SONGS_IN_QUEUE:
       return action.songs;

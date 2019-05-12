@@ -1,13 +1,17 @@
 import { Action, Song, SongReadiness } from "./types";
 import { store } from "../Stores/index";
-import { setActiveSong } from "./activeSong";
+import {
+  setActiveSong,
+  deleteQueueSong,
+  toggleSpotifySongReadiness
+} from "./index";
 import {
   saveSongsInQueue,
   deleteRecentActiveSongFromQueue,
   toggleQueueSongReadiness
 } from "./index";
 import { notification } from "antd";
-import { toggleSpotifySongReadiness } from "./spotifySongs";
+import { saveQueueSongUuid } from "./queueSongs";
 const ip = window.location.hostname;
 // experimental
 export const ws = new WebSocket(`ws://${ip}:8080/ws/`);
@@ -77,11 +81,18 @@ type NextSong = {
   next_song: Song;
 };
 
-type QueueState = {
-  active_song: Song;
-  songs_queue: Song[];
+type ScheduledSong = {
+  song: Song;
+  uuid: string;
+  // there is also requested_at, but we don't need it atm.
 };
 
+type QueueState = {
+  active_song: Song;
+  songs_queue: ScheduledSong[];
+};
+
+// it needs to be simplified
 ws.onmessage = event => {
   const data: WSAction = JSON.parse(event.data);
   switch (data.action) {
@@ -103,31 +114,30 @@ ws.onmessage = event => {
       break;
     case "queue_state":
       let queueState: QueueState = data.value;
-      const queue: Song[] = queueState.songs_queue;
-      store.dispatch(saveSongsInQueue(queue));
+      const queue = queueState.songs_queue;
+      const queueSongs = queue.map(scheduledSong => {
+        return Object.assign({}, scheduledSong.song, {
+          uuid: scheduledSong.uuid
+        });
+      });
+      store.dispatch(saveSongsInQueue(queueSongs));
       let activeSong: Song = queueState.active_song;
       store.dispatch(setActiveSong(activeSong));
       return;
     case "song_download_finished":
-      const downloadedSongData: Data<Song> = data;
+      const downloadedSongData: Data<ScheduledSong> = data;
       // imit formatted name
-      let downloadedSong: Song = {
-        ...downloadedSongData.value,
-        formatted_name: `${downloadedSongData.value.name} - ${
-          downloadedSongData.value.artists
-        }`
-      };
+      const songFormattedName = `${downloadedSongData.value.song.name} - ${
+        downloadedSongData.value.song.artists
+      }`;
+      const { uuid } = downloadedSongData.value;
+
       store.dispatch(
-        toggleQueueSongReadiness(
-          downloadedSong.formatted_name,
-          SongReadiness.READY
-        )
+        toggleQueueSongReadiness(songFormattedName, SongReadiness.READY)
       );
+      store.dispatch(saveQueueSongUuid(songFormattedName, uuid));
       store.dispatch(
-        toggleSpotifySongReadiness(
-          downloadedSong.formatted_name,
-          SongReadiness.READY
-        )
+        toggleSpotifySongReadiness(songFormattedName, SongReadiness.READY)
       );
 
       return;
@@ -146,6 +156,10 @@ ws.onmessage = event => {
         )
       );
       return;
+    case "delete_song_from_queue":
+      // data containing deleted song's uuid
+      const deletedSongData: Data<string> = data;
+      store.dispatch(deleteQueueSong(deletedSongData.value));
     case "song_download_started":
       break;
     default:
@@ -178,6 +192,16 @@ export function skipSong() {
   const data = {
     action: "skip_song",
     payload: {}
+  };
+  ws.send(JSON.stringify(data));
+}
+
+export function deleteSongFromQueue(songUuid: string) {
+  const data = {
+    action: "delete_song_from_queue",
+    payload: {
+      uuid: songUuid
+    }
   };
   ws.send(JSON.stringify(data));
 }

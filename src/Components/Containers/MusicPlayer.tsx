@@ -54,8 +54,8 @@ const SwipeableArea = css({
   position: "fixed",
   bottom: 0,
   left: 0,
-  right: 0,
-  height: "10rem"
+  right: "45%",
+  height: "5rem"
 });
 
 type MusicPlayerProps = {

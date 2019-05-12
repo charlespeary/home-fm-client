@@ -13,6 +13,9 @@ export {
   addSongsToQueue,
   saveSongsInQueue,
   deleteRecentActiveSongFromQueue,
-  toggleQueueSongReadiness
+  toggleQueueSongReadiness,
+  deleteQueueSong,
+  saveQueueSongUuid
 } from "./queueSongs";
 export { toggleAvailableSongNsfw, saveAvailableSongs } from "./availableSongs";
+export { getSongFormattedName } from "./functions";

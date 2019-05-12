@@ -6,6 +6,7 @@ import { List, Avatar, Icon, Switch, Button } from "antd";
 import { jsx, css } from "@emotion/core";
 import styled from "@emotion/styled";
 import { toggleSongNsfw } from "../../Functions/index";
+import { deleteSongFromQueue } from "../../Actions/websocket";
 
 interface SongProps {
   song: Song;
@@ -75,8 +76,11 @@ const IconsContainer = styled.div({
   marginRight: "0.7rem"
 });
 export class SongQueueItem extends Component<SongProps> {
+  state = {
+    loading: false
+  };
   render() {
-    const { artists } = this.props.song;
+    const { artists, uuid } = this.props.song;
     return (
       <List.Item className="list-item-song">
         <List.Item.Meta
@@ -91,10 +95,17 @@ export class SongQueueItem extends Component<SongProps> {
         <IconsContainer>
           <Button
             // it is not a link, but link comes without borders and that is what I need
+            loading={this.state.loading}
             type="link"
-            css={{ fontSize: "1.3rem", color: "#e83752" }}
+            css={{ fontSize: "24px", color: "#e83752" }}
             title="Delete from queue"
-            icon={"close-circle"}
+            icon={"delete"}
+            onClick={() => {
+              if (typeof uuid !== "undefined") {
+                deleteSongFromQueue(uuid);
+                this.setState({ loading: true });
+              }
+            }}
           />
           {formatProgress(this.props.song.isReady)}
         </IconsContainer>

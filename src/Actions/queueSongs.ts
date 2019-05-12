@@ -21,11 +21,24 @@ export type AddSongs = {
   songs: Song[];
 };
 
+export type DeleteSongFromQueue = {
+  type: Action.DELETE_SONG_FROM_QUEUE;
+  songUuid: string;
+};
+
+export type SaveQueueSongUuid = {
+  type: Action.SAVE_QUEUE_SONG_UUID;
+  uuid: string;
+  songFormattedName: string;
+};
+
 export type SongsQueueAction =
   | SaveQueueSongs
   | AddSongs
   | ToggleQueueSongReadiness
-  | DeleteRecentActiveSong;
+  | DeleteRecentActiveSong
+  | DeleteSongFromQueue
+  | SaveQueueSongUuid;
 
 export function addSongsToQueue(songs: Song[]): SongsQueueAction {
   return {
@@ -47,6 +60,16 @@ export function deleteRecentActiveSongFromQueue(): SongsQueueAction {
   };
 }
 
+export function saveQueueSongUuid(
+  songFormattedName: string,
+  uuid: string
+): SongsQueueAction {
+  return {
+    type: Action.SAVE_QUEUE_SONG_UUID,
+    uuid,
+    songFormattedName
+  };
+}
 // toggle song
 export function toggleQueueSongReadiness(
   songFormattedName: string,
@@ -56,5 +79,12 @@ export function toggleQueueSongReadiness(
     type: Action.TOGGLE_QUEUE_SONG_READINESS,
     isReady,
     songFormattedName
+  };
+}
+
+export function deleteQueueSong(songUuid: string): SongsQueueAction {
+  return {
+    type: Action.DELETE_SONG_FROM_QUEUE,
+    songUuid
   };
 }

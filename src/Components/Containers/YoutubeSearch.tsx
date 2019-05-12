@@ -46,7 +46,6 @@ const SongSearch = (props: SongSearchProps & FormComponentProps) => {
         // validate form and prevent default from refreshing the page
         e.preventDefault();
         props.form.validateFields((err, values: FormValues) => {
-          console.log(values);
           if (!err) {
             // clear form
             props.form.resetFields();

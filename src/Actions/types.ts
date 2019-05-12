@@ -64,6 +64,7 @@ export type Song = {
   // it's gonna be used in queue to determine whether server downloaded it already or not
   isReady: SongReadiness;
   nsfw: boolean;
+  uuid?: string;
 };
 
 export type Artist = {
@@ -142,5 +143,8 @@ export enum Action {
   //
   TOGGLE_SPOTIFY_SONG_READINESS,
   TOGGLE_QUEUE_SONG_READINESS,
-  TOGGLE_AVAILABLE_SONG_NSFW
+  TOGGLE_AVAILABLE_SONG_NSFW,
+  DELETE_SONG_FROM_QUEUE,
+  OVERWRITE_QUEUE_SONG,
+  SAVE_QUEUE_SONG_UUID
 }
