@@ -37,7 +37,6 @@ const NsfwSwitch = styled.div({
 export class SongItem extends Component<SongProps> {
   render() {
     const { artists, nsfw, id } = this.props.song;
-
     return (
       <List.Item className="list-item-song">
         <List.Item.Meta
@@ -59,7 +58,7 @@ export class SongItem extends Component<SongProps> {
         </Button>
         <NsfwSwitch title="is it safe for random play?">
           <Switch
-            defaultChecked={nsfw}
+            checked={nsfw}
             onChange={(isNsfw: boolean) => {
               toggleSongNsfw(parseInt(id), isNsfw);
             }}

@@ -1,5 +1,9 @@
 import axios from "axios";
-import { getUserFavouriteSongs, getUserInformations } from "../Actions/index";
+import {
+  getUserFavouriteSongs,
+  getUserInformations,
+  toggleAvailableSongNsfw
+} from "../Actions/index";
 import { Song } from "../Actions/types";
 import { store } from "../Stores/index";
 import { getUserAlbums } from "../Actions/albums";
@@ -26,9 +30,11 @@ export async function getAvailableSongs() {
 }
 
 export async function toggleSongNsfw(songId: number, isNsfw: boolean) {
-  return apiConnection
-    .put(`/songs/${songId}/${isNsfw}`)
-    .then(res => console.log(res));
+  return apiConnection.put<Song>(`/songs/${songId}/${isNsfw}`).then(res => {
+    store.dispatch(
+      toggleAvailableSongNsfw(parseInt(res.data.id), res.data.nsfw)
+    );
+  });
 }
 
 // get user data from spotify and save it in the store
