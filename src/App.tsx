@@ -34,7 +34,7 @@ export const App: FunctionComponent<AppProps> = props => {
   useEffect(() => {
     props.getTokenFromLocalStorage();
     fetchSpotifyData();
-    props.history.push("/songs");
+    props.history.push("/songs/available");
   }, [props.token.value]);
   return (
     <div className="App-header">
@@ -47,7 +47,7 @@ export const App: FunctionComponent<AppProps> = props => {
           <Route path="/config" component={Config} />
         </Switch>
       </Container>
-      {/* {props.socketConnected && <MusicPlayer />} */}
+      {props.socketConnected && <MusicPlayer />}
     </div>
   );
 };

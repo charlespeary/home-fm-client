@@ -35,21 +35,21 @@ function convertEnum(key: string): CurrentView {
 const MenuComponent: FunctionComponent<MenuProps> = (props: MenuProps) => {
   return (
     <Menu
+      defaultSelectedKeys={[CurrentView.AvailableSongs]}
       onSelect={e => {
         let view = convertEnum(e.key);
-        // if I remove this console.log "React is not defined" error occurs xD
         props.setView(view);
       }}
       mode="horizontal"
     >
       <Menu.Item key={CurrentView.SpotifySongs}>
-        <Link to="/songs">Spotify songs</Link>
+        <Link to="/songs/spotify">Spotify songs</Link>
       </Menu.Item>
       <Menu.Item key={CurrentView.QueueSongs}>
-        <Link to="/songs">Songs queue</Link>
+        <Link to="/songs/queue">Songs queue</Link>
       </Menu.Item>
       <Menu.Item key={CurrentView.AvailableSongs}>
-        <Link to="/songs">Available songs</Link>
+        <Link to="/songs/available">Available songs</Link>
       </Menu.Item>
       <Menu.Item key={CurrentView.YoutubeSearch}>
         <Link to="/youtube_search">Search on youtube</Link>

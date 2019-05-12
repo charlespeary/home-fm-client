@@ -1,53 +1,16 @@
 /** @jsx jsx */
 
-import { jsx, css } from "@emotion/core";
+import { jsx, css, keyframes } from "@emotion/core";
 import React, { Component } from "react";
-import { isObjectEmpty, ws } from "../../Actions/index";
+import { isObjectEmpty, skipSong } from "../../Actions/index";
 import { Song } from "../../Actions/types";
-import { Avatar, Slider, Button } from "antd";
+import { Avatar, Button } from "antd";
+import styled from "@emotion/styled";
 import { ReduxState } from "../../Stores";
 import { connect } from "react-redux";
-import { skipSong } from "../../Actions/websocket";
-import styled from "@emotion/styled";
-type MusicPlayerProps = {
-  activeSong: Song;
-};
+import { Swipeable } from "react-swipeable";
 
-function convertTime(time: number) {
-  const seconds = Math.floor(time);
-  const mins = Math.floor(seconds / 60);
-  const secondsRemaining = seconds - mins * 60;
-
-  // if seconds are less than 10 add 0 at the begining of the string so it looks like 0:01
-  return `${mins}:${
-    secondsRemaining < 10 ? `0${secondsRemaining}` : secondsRemaining
-  }`;
-}
-
-const breakpoint = `@media (max-width: 576px)`;
-
-const musicPlayer = css({
-  background: "#282828",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "flex-end",
-  width: "100%",
-  marginLeft: "auto",
-  marginRight: "auto",
-  flexWrap: "wrap",
-  padding: "1rem 5% 1rem 5%",
-  height: "8rem"
-  // [breakpoint]: {
-  //   padding: "1rem 5% 1rem 5%"
-  // }
-});
-
-const playerTools = css({
-  width: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "flex-end"
-});
+const breakpoint = `@media (min-width: 1024px)`;
 
 const ButtonContainer = styled.div({
   display: "flex",
@@ -56,17 +19,74 @@ const ButtonContainer = styled.div({
   height: "100%"
 });
 
+const MusicPlayerStyling = (isVisible: boolean) =>
+  css({
+    position: "fixed",
+    bottom: isVisible ? "0rem" : "-5rem",
+    transition: "bottom 0.3s linear",
+    left: 0,
+    right: 0,
+    height: "5rem",
+    padding: "1.25rem",
+    background: "#282828",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    [breakpoint]: {
+      paddingLeft: "1.5rem",
+      paddingRight: "4rem"
+    }
+  });
+
+const ShowButton = css({
+  position: "absolute",
+  top: "-3rem",
+  marginLeft: "auto",
+  marginRight: "auto",
+  left: "5%",
+  transform: "translate(-50 %, -50 %)",
+  [breakpoint]: {
+    display: "none"
+  }
+});
+
+const SwipeableArea = css({
+  position: "fixed",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  height: "10rem"
+});
+
+type MusicPlayerProps = {
+  activeSong: Song;
+};
+
 class MusicPlayer extends Component<MusicPlayerProps> {
   state = {
     progress: 0,
-    clicked: false
+    playerVisible: true
   };
 
   render() {
     // const { duration_ms } = this.props.activeSong;
     const isSongSet = !isObjectEmpty(this.props.activeSong);
+
     return (
-      <div css={musicPlayer}>
+      <div css={MusicPlayerStyling(this.state.playerVisible)}>
+        <Swipeable
+          css={SwipeableArea}
+          onSwipedUp={() => this.setState({ playerVisible: true })}
+          onSwipedDown={() => this.setState({ playerVisible: false })}
+        />
+        <Button
+          css={ShowButton}
+          type="primary"
+          icon={this.state.playerVisible ? "down-square" : "up-square"}
+          onClick={() =>
+            this.setState({ playerVisible: !this.state.playerVisible })
+          }
+        />
         {isSongSet && <ActiveSong activeSong={this.props.activeSong} />}
         <SkipSongButton />
       </div>
@@ -86,56 +106,15 @@ const SkipSongButton = () => (
   </ButtonContainer>
 );
 
-type SongTimerProps = {
-  duration: number;
-};
-
-const songTimer = css({
-  width: "30%",
-  height: "80%"
-});
-
-class SongTimer extends Component<SongTimerProps> {
-  state = {
-    progress: 0
-  };
-
-  constructor(props: any) {
-    super(props);
-    setInterval(
-      () => this.setState({ progress: this.state.progress + 1 }),
-      1000
-    );
-  }
-
-  componentWillReceiveProps(props: SongTimerProps) {
-    if (props.duration !== this.props.duration) {
-      this.setState({ progress: 0 });
-    }
-  }
-
-  render() {
-    const { duration } = this.props;
-    return (
-      <div css={songTimer}>
-        <div>
-          {convertTime(this.state.progress)} / {convertTime(duration)}
-        </div>
-      </div>
-    );
-  }
-}
-
 type ActiveSongProps = {
   activeSong: Song;
 };
 
 const activeSong = css({
-  width: "70%",
   height: "80%",
-  [breakpoint]: {
-    width: "70%"
-  }
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center"
 });
 
 class ActiveSong extends Component<ActiveSongProps> {
