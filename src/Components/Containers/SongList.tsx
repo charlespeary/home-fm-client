@@ -15,6 +15,7 @@ import {
   addSongsToQueue
 } from "../../Actions/index";
 import { LoginToSpotify } from "./Login";
+import { useSwipeable, Swipeable } from "react-swipeable";
 
 const Search = Input.Search;
 type SongListProps = {
@@ -30,20 +31,21 @@ type SongListProps = {
 };
 
 type SongListState = {
-  offset: number;
   currentPage: number;
-  window_height: number;
-  window_width: number;
   searchbarValue: string;
 };
 
+const ListStyling = css({
+  ".ant-spin-nested-loading": {
+    height: "80vh"
+  }
+});
+
 class SongList extends Component<SongListProps, SongListState> {
   state = {
-    offset: 0,
     currentPage: 1,
-    window_height: window.innerHeight,
-    window_width: window.innerWidth,
-    searchbarValue: ""
+    searchbarValue: "",
+    pageSize: window.innerHeight / 100
   };
 
   getData = (songs: Song[]) => {
@@ -73,7 +75,6 @@ class SongList extends Component<SongListProps, SongListState> {
           return this.getData(this.props.availableSongs);
       }
     })();
-
     return (
       <div>
         <Search
@@ -96,7 +97,25 @@ class SongList extends Component<SongListProps, SongListState> {
             }
           }}
         />
-        <span>
+        <Swipeable
+          onSwipedLeft={e => {
+            if (
+              Math.ceil(songs.length / this.state.pageSize) <
+              this.state.currentPage + 1
+            ) {
+              return;
+            } else {
+              this.setState({ currentPage: this.state.currentPage + 1 });
+            }
+          }}
+          onSwipedRight={e => {
+            if (this.state.currentPage - 1 <= 0) {
+              return;
+            } else {
+              this.setState({ currentPage: this.state.currentPage - 1 });
+            }
+          }}
+        >
           <List
             locale={{
               emptyText:
@@ -106,6 +125,7 @@ class SongList extends Component<SongListProps, SongListState> {
                   "There are no songs available"
                 )
             }}
+            css={ListStyling}
             bordered={false}
             size={"large"}
             itemLayout="horizontal"
@@ -144,13 +164,15 @@ class SongList extends Component<SongListProps, SongListState> {
               }
             }}
             pagination={{
+              current: this.state.currentPage,
               total: songs.length,
-              pageSize: window.innerHeight / 115,
+              pageSize: this.state.pageSize,
               simple: true,
-              showQuickJumper: true
+              showQuickJumper: true,
+              onChange: currentPage => this.setState({ currentPage })
             }}
           />
-        </span>
+        </Swipeable>
       </div>
     );
   }

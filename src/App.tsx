@@ -27,8 +27,6 @@ interface AppProps extends RouteComponentProps {
 }
 
 const Container = styled.div({
-  width: "100 %",
-  height: "80vh",
   background: "#fff"
 });
 
@@ -49,7 +47,7 @@ export const App: FunctionComponent<AppProps> = props => {
           <Route path="/config" component={Config} />
         </Switch>
       </Container>
-      {props.socketConnected && <MusicPlayer />}
+      {/* {props.socketConnected && <MusicPlayer />} */}
     </div>
   );
 };

@@ -20,7 +20,7 @@ export function formatArtists(artists: Artist[]) {
 }
 
 function formatText(description: string) {
-  const maxNumberOfLetters = window.innerWidth / 10;
+  const maxNumberOfLetters = window.innerWidth / 25;
   if (description.length > maxNumberOfLetters) {
     return `${description.slice(0, maxNumberOfLetters)}...`;
   } else {
@@ -72,6 +72,9 @@ export class SongItem extends Component<SongProps> {
   }
 }
 
+const IconsContainer = styled.div({
+  marginRight: "0.7rem"
+});
 export class SongQueueItem extends Component<SongProps> {
   render() {
     const { artists } = this.props.song;
@@ -86,7 +89,16 @@ export class SongQueueItem extends Component<SongProps> {
           }
           description={formatText(artists)}
         />
-        {formatProgress(this.props.song.isReady)}
+        <IconsContainer>
+          <Button
+            // it is not a link, but link comes without borders and that is what I need
+            type="link"
+            css={{ fontSize: "1.3rem", color: "#e83752" }}
+            title="Delete from queue"
+            icon={"close-circle"}
+          />
+          {formatProgress(this.props.song.isReady)}
+        </IconsContainer>
       </List.Item>
     );
   }
@@ -105,6 +117,16 @@ type SpotifySongProps = {
 export class SpotifySongItem extends Component<SongProps & SpotifySongProps> {
   render() {
     const { artists, isReady, id } = this.props.song;
+    const buttonMessage = (() => {
+      switch (isReady) {
+        case SongReadiness.READY:
+          return "Schedule";
+        case SongReadiness.DOWNLOADING:
+          return "Downloading...";
+        case SongReadiness.NOT_READY:
+          return "Download and schedule";
+      }
+    })();
 
     return (
       <List.Item className="list-item-song">
@@ -138,9 +160,7 @@ export class SpotifySongItem extends Component<SongProps & SpotifySongProps> {
             }
           ]}
         >
-          {isReady === SongReadiness.READY
-            ? "Schedule"
-            : "Download and schedule"}
+          {buttonMessage}
         </Button>
       </List.Item>
     );
@@ -156,7 +176,6 @@ const success = css({
 });
 
 const progressBar = css({
-  marginRight: "1rem",
   fontSize: 24
 });
 

@@ -21,7 +21,7 @@ export const LoginToSpotify = () => {
 
   return (
     <a css={link} href={linkToSpotifyAuth}>
-      Login to your spotify accountz
+      Login to your spotify account
     </a>
   );
 };
