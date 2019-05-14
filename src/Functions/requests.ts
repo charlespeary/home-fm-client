@@ -5,7 +5,7 @@ import {
   toggleAvailableSongNsfw,
   deleteAvailableSong
 } from "../Actions/index";
-import { Song } from "../Actions/types";
+import { Song, Config } from "../Actions/types";
 import { store } from "../Stores/index";
 import { getUserAlbums } from "../Actions/albums";
 export const spotifyConnection = axios.create({
@@ -41,6 +41,12 @@ export async function toggleSongNsfw(songId: number, isNsfw: boolean) {
 export async function deleteSong(songId: number) {
   return apiConnection.delete(`/songs/${songId}`).then(res => {
     store.dispatch(deleteAvailableSong(parseInt(res.data.id)));
+  });
+}
+
+export async function updateConfig(config: Config) {
+  return apiConnection.put("/config", config).then(res => {
+    console.log(res);
   });
 }
 

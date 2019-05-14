@@ -84,6 +84,10 @@ export type SongsState = {
   previousSongs: Song[];
 };
 
+export type Config = {
+  frequency: number;
+};
+
 // ################## ENUMS ##################
 
 export enum SongReadiness {

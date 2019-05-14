@@ -56,7 +56,7 @@ const SongSearch = (props: SongSearchProps & FormComponentProps) => {
               artists: values.artists,
               formatted_name: `${values.artists} - ${values.songName}`,
               duration: 0,
-              thumbnail_url: "https://via.placeholder.com/32",
+              thumbnail_url: "none",
               isReady: SongReadiness.NOT_READY,
               nsfw: values.nsfw
             };

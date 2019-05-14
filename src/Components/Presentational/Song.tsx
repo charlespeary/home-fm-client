@@ -85,10 +85,18 @@ export class SongItem extends Component<SongProps> {
 const IconsContainer = styled.div({
   marginRight: "0.7rem"
 });
+
 export class SongQueueItem extends Component<SongProps> {
   state = {
     loading: false
   };
+
+  componentWillReceiveProps(props: SongProps) {
+    if (this.props.song.uuid !== props.song.uuid) {
+      this.setState({ loading: false });
+    }
+  }
+
   render() {
     const { artists, uuid } = this.props.song;
     return (

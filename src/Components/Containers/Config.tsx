@@ -6,6 +6,8 @@ import React, { FunctionComponent } from "react";
 import styled from "@emotion/styled";
 import { useState } from "react";
 import { FormComponentProps } from "antd/lib/form";
+import { Config as ConfigValues } from "../../Actions/types";
+import { updateConfig } from "../../Functions";
 
 const FormContainer = styled.div({
   margin: "auto",
@@ -26,9 +28,7 @@ const SearchForm = css({
 
 type SongSearchProps = {};
 type FormValues = {
-  artists: string;
-  songName: string;
-  nsfw: boolean;
+  frequency: number;
 };
 
 const ConfigFormComponent = (props: SongSearchProps & FormComponentProps) => {
@@ -42,8 +42,9 @@ const ConfigFormComponent = (props: SongSearchProps & FormComponentProps) => {
       onSubmit={e => {
         // validate form and prevent default from refreshing the page
         e.preventDefault();
-        props.form.validateFields((err, values: FormValues) => {
+        props.form.validateFields((err, values: ConfigValues) => {
           if (!err) {
+            updateConfig(values);
             // clear form
             props.form.resetFields();
             // create new song, so we can use logic used in normal queue
@@ -65,6 +66,7 @@ const ConfigFormComponent = (props: SongSearchProps & FormComponentProps) => {
         })(<InputNumber step={0.1} min={87.6} max={105.0} />)}
       </Form.Item>
       <Form.Item required={true}>
+        <div>Changes will take place after currently played song</div>
         <Button loading={disabled} type="primary" htmlType="submit">
           Save
         </Button>

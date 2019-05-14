@@ -8,7 +8,7 @@ import { Provider, connect } from "react-redux";
 import { Dispatch } from "redux";
 import { store, ReduxState } from "./Stores/index";
 import { saveToken, getTokenFromLocalStorage } from "./Actions/index";
-import { Token } from "./Actions/types";
+import { Token, TokenStatus } from "./Actions/types";
 import { RouteComponentProps } from "react-router-dom";
 import {
   MusicPlayer,
@@ -33,7 +33,12 @@ const Container = styled.div({
 export const App: FunctionComponent<AppProps> = props => {
   useEffect(() => {
     props.getTokenFromLocalStorage();
-    fetchSpotifyData();
+    if (
+      props.token.status !== TokenStatus.EXPIRED &&
+      props.token.value !== undefined
+    ) {
+      fetchSpotifyData();
+    }
     props.history.push("/songs/available");
   }, [props.token.value]);
   return (

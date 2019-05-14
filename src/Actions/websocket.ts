@@ -11,10 +11,10 @@ import {
   toggleQueueSongReadiness
 } from "./index";
 import { notification } from "antd";
-import { saveQueueSongUuid } from "./queueSongs";
+import { saveQueueSongUuid, addSongsToQueue } from "./queueSongs";
 const ip = window.location.hostname;
 // experimental
-export const ws = new WebSocket(`ws://${ip}:8080/ws/`);
+export let ws = new WebSocket(`ws://${ip}:8080/ws/`);
 
 type WSAction = {
   action: string;
@@ -130,12 +130,13 @@ ws.onmessage = event => {
       const songFormattedName = `${downloadedSongData.value.song.name} - ${
         downloadedSongData.value.song.artists
       }`;
-      const { uuid } = downloadedSongData.value;
-
-      store.dispatch(
-        toggleQueueSongReadiness(songFormattedName, SongReadiness.READY)
-      );
-      store.dispatch(saveQueueSongUuid(songFormattedName, uuid));
+      const { song } = downloadedSongData.value;
+      const songToSave = { ...song, uuid: downloadedSongData.value.uuid };
+      //  store.dispatch(
+      //    toggleQueueSongReadiness(songFormattedName, SongReadiness.READY)
+      //   );
+      // store.dispatch(saveQueueSongUuid(songFormattedName, uuid));
+      store.dispatch(addSongsToQueue([songToSave]));
       store.dispatch(
         toggleSpotifySongReadiness(songFormattedName, SongReadiness.READY)
       );

@@ -8,6 +8,7 @@ export {
   spotifyConnection,
   toggleSongNsfw,
   fetchSpotifyData,
-  deleteSong
+  deleteSong,
+  updateConfig
 } from "./requests";
 export { fetchData } from "./fetchData";

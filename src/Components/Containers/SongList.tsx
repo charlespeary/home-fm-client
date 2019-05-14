@@ -197,7 +197,7 @@ const dispatchToProps = (dispatch: Dispatch) => {
         duration: window.innerWidth >= 576 ? 2 : 1
       });
       scheduleSong(song);
-      dispatch(addSongsToQueue([song]));
+      // dispatch(addSongsToQueue([song]));
     },
     toggleSongReadiness: (songId: string, readiness: SongReadiness) => {
       dispatch(toggleSpotifySongReadiness(songId, readiness));
