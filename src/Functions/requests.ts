@@ -2,7 +2,8 @@ import axios from "axios";
 import {
   getUserFavouriteSongs,
   getUserInformations,
-  toggleAvailableSongNsfw
+  toggleAvailableSongNsfw,
+  deleteAvailableSong
 } from "../Actions/index";
 import { Song } from "../Actions/types";
 import { store } from "../Stores/index";
@@ -34,6 +35,12 @@ export async function toggleSongNsfw(songId: number, isNsfw: boolean) {
     store.dispatch(
       toggleAvailableSongNsfw(parseInt(res.data.id), res.data.nsfw)
     );
+  });
+}
+
+export async function deleteSong(songId: number) {
+  return apiConnection.delete(`/songs/${songId}`).then(res => {
+    store.dispatch(deleteAvailableSong(parseInt(res.data.id)));
   });
 }
 

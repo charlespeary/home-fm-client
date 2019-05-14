@@ -5,7 +5,7 @@ import { Song, Artist, SongReadiness } from "../../Actions/types";
 import { List, Avatar, Icon, Switch, Button } from "antd";
 import { jsx, css } from "@emotion/core";
 import styled from "@emotion/styled";
-import { toggleSongNsfw } from "../../Functions/index";
+import { toggleSongNsfw, deleteSong } from "../../Functions/index";
 import { deleteSongFromQueue } from "../../Actions/websocket";
 
 interface SongProps {
@@ -48,6 +48,16 @@ export class SongItem extends Component<SongProps> {
             </span>
           }
           description={formatText(artists)}
+        />
+        <Button
+          // it is not a link, but link comes without borders and that is what I need
+          type="link"
+          css={{ fontSize: "24px", color: "#e83752", marginRight: "1rem" }}
+          title="Delete from radio database"
+          icon={"delete"}
+          onClick={() => {
+            deleteSong(parseInt(id));
+          }}
         />
         <Button
           onClick={() => {
@@ -151,6 +161,7 @@ export class SpotifySongItem extends Component<SongProps & SpotifySongProps> {
         />
         <Button
           loading={isReady === SongReadiness.DOWNLOADING}
+          type={isReady === SongReadiness.READY ? "primary" : "default"}
           onClick={() => {
             // if song isn't already downloaded, activate loading on it until server is done downloading it
             if (isReady !== SongReadiness.READY) {
@@ -162,12 +173,8 @@ export class SpotifySongItem extends Component<SongProps & SpotifySongProps> {
             this.props.setActiveSong(this.props.song);
           }}
           css={[
-            ScheduleSongButton,
+            ScheduleSongButton
             // if song is available on the server already - paint this button green
-            {
-              background:
-                isReady === SongReadiness.READY ? "#56e27a" : "initial"
-            }
           ]}
         >
           {buttonMessage}

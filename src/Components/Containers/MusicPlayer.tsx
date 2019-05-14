@@ -44,10 +44,7 @@ const ShowButton = css({
   marginLeft: "auto",
   marginRight: "auto",
   left: "5%",
-  transform: "translate(-50 %, -50 %)",
-  [breakpoint]: {
-    display: "none"
-  }
+  transform: "translate(-50 %, -50 %)"
 });
 
 const SwipeableArea = css({

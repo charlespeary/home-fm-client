@@ -17,5 +17,9 @@ export {
   deleteQueueSong,
   saveQueueSongUuid
 } from "./queueSongs";
-export { toggleAvailableSongNsfw, saveAvailableSongs } from "./availableSongs";
+export {
+  toggleAvailableSongNsfw,
+  saveAvailableSongs,
+  deleteAvailableSong
+} from "./availableSongs";
 export { getSongFormattedName } from "./functions";

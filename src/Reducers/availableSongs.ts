@@ -17,6 +17,8 @@ export function availableSongs(
           return song;
         }
       });
+    case Action.DELETE_AVAILABLE_SONG:
+      return state.filter(song => parseInt(song.id) !== action.songId);
     default:
       return state;
   }

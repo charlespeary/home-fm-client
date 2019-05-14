@@ -11,7 +11,15 @@ type ToggleAvailableSongNsfw = {
   nsfw: boolean;
 };
 
-export type AvailableSongsAction = SaveAvailableSongs | ToggleAvailableSongNsfw;
+type DeleteAvailableSong = {
+  type: Action.DELETE_AVAILABLE_SONG;
+  songId: number;
+};
+
+export type AvailableSongsAction =
+  | SaveAvailableSongs
+  | ToggleAvailableSongNsfw
+  | DeleteAvailableSong;
 
 // save all songs that radio knows of
 export function saveAvailableSongs(songs: Song[]): AvailableSongsAction {
@@ -30,5 +38,12 @@ export function toggleAvailableSongNsfw(
     type: Action.TOGGLE_AVAILABLE_SONG_NSFW,
     songId,
     nsfw
+  };
+}
+
+export function deleteAvailableSong(songId: number): AvailableSongsAction {
+  return {
+    type: Action.DELETE_AVAILABLE_SONG,
+    songId
   };
 }
