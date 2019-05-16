@@ -63,7 +63,6 @@ const SongSearch = (props: SongSearchProps & FormComponentProps) => {
 
             // schedule song and add it to queue
             scheduleSong(song);
-            store.dispatch(addSongsToQueue([song]));
             // turn off form for a second, so user won't spam it
             setDisabled(true);
             setTimeout(() => {
@@ -72,7 +71,7 @@ const SongSearch = (props: SongSearchProps & FormComponentProps) => {
                 message: "Searching song on youtube...",
                 description: song.formatted_name
               });
-            }, 1000);
+            }, 500);
           }
         });
       }}

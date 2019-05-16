@@ -12,3 +12,4 @@ export {
   updateConfig
 } from "./requests";
 export { fetchData } from "./fetchData";
+export { config } from "./config";

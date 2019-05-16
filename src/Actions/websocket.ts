@@ -11,10 +11,10 @@ import {
   toggleQueueSongReadiness
 } from "./index";
 import { notification } from "antd";
-import { saveQueueSongUuid, addSongsToQueue } from "./queueSongs";
-const ip = window.location.hostname;
+import { addSongsToQueue } from "./queueSongs";
+import { config } from "../Functions";
 // experimental
-export let ws = new WebSocket(`ws://${ip}:8080/ws/`);
+export let ws = new WebSocket(config.websocket);
 
 type WSAction = {
   action: string;
