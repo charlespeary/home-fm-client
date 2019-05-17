@@ -16,7 +16,7 @@ const link = css({
 export const LoginToSpotify = () => {
   const clientId = "d09edd82dac149a5b6f076515368e06d";
   const responseType = "token";
-  const redirectURL = `http:://rusty-radio:8080/auth`;
+  const redirectURL = `http://rusty-radio/auth`;
   const linkToSpotifyAuth = `https://accounts.spotify.com/authorize?client_id=${clientId}&redirect_uri=${redirectURL}&response_type=${responseType}&scope=user-library-read`;
 
   return (
